@@ -23,6 +23,7 @@ Arguments from the config_file are:
 """
 import os
 import sys
+sys.path.append('..')
 import glob
 import pandas as pd
 import logging
@@ -31,7 +32,7 @@ import json
 import datetime
 from dateutil import rrule
 
-from ..common import query_cdm 
+from common import query_cdm 
 
 def value_counts(cdm_table_ym,column,loc_ships,loc_buoys):
     vc = cdm_table_ym[column].value_counts()

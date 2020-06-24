@@ -1,6 +1,6 @@
 
 # WATCH THIS HARCODING UNTIL WE DECIDE WHAT TO DO WITH REPOS AND ENVS!
-pyEnvironment_directory=$code_directory/glamod-marine-processing/obs-suite/pyenvs/env2
+pyEnvironment_directory=$mug_code_directory/env/mug_env
 # Activate python environment and add jaspy3.7 path to LD_LIBRARY_PATH so that cartopy and other can find the geos library
 source $pyEnvironment_directory/bin/activate
 export PYTHONPATH="$mug_code_directory:${PYTHONPATH}"

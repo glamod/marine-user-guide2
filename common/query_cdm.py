@@ -43,7 +43,7 @@ import sys
 import pandas as pd
 import glob
 import logging
-from . import properties
+from . import cdm_properties as properties
 
 
 

@@ -32,6 +32,7 @@ Arguments from the config_file are:
 """
 import os
 import sys
+sys.path.append('..')
 import glob
 import json
 import pandas as pd
@@ -45,7 +46,7 @@ import datetime
 from dateutil import rrule
 
 from data_summaries import properties
-from ..common import query_cdm
+from common import query_cdm
 
 
 LEN_DD = 10000 # DF LEN TO SWAP TO DASK-PARQUET AGGREGATION
