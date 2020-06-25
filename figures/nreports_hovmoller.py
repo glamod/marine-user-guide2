@@ -70,7 +70,7 @@ if __name__ == "__main__":
             param = table.split('-')[1]
             cbar_label = '#Observations'
         
-        file_pattern = table + file_in_id
+        file_pattern = table + file_in_id + '.nc'
         dataset = xr.open_dataset(os.path.join(dir_data,file_pattern))
         
         # Do the aggregations for monthly
