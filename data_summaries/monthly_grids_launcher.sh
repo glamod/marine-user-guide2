@@ -19,7 +19,7 @@ log_dir=$data_directory"/marine-user-guide/"$mug_version"/log/monthly_grids"
 if [ ! -d $log_dir ]; then mkdir -p $log_dir; fi
 echo "LOG DIR IS $log_dir"
 
-job_time_hhmm=16:00
+job_time_hhmm=10:00
 job_memo_mbi=5000
 for table in header observations-sst observations-at observations-dpt observations-wd observations-ws observations-slp
 do

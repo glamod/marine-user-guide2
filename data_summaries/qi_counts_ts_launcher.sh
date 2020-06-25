@@ -19,7 +19,7 @@ log_dir=$data_directory"/marine-user-guide/"$mug_version"/log/qi_counts_ts"
 if [ ! -d $log_dir ]; then mkdir -p $log_dir; fi
 echo "LOG DIR IS $log_dir"
 
-job_time_hhmm=07:00
+job_time_hhmm=03:00
 job_memo_mbi=5000
 for qi in duplicate_status report_quality
 do
