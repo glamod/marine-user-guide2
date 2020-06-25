@@ -51,7 +51,6 @@ projections['Mollweide'] = ccrs.Mollweide()
 def read_dataset(file_path,scale,offset):
     
     dataset = xr.open_dataset(file_path,autoclose=True)
-    print(dataset)
     var = 'mean'
     dataset[var] = offset + scale*dataset[var]    
     return dataset
