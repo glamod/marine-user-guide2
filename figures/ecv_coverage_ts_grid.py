@@ -73,19 +73,21 @@ if __name__ == "__main__":
     f, ax = plt.subplots(3, 2, figsize=(10,10),sharex=True,sharey=True)# 
     ax2 = ax.copy()
     for i,table in enumerate(observation_tables):
+        logging.info('Table: {}'.format(table))
         var = table.split('-')[1]
         title = var_properties.var_properties['long_name_upper'][var]
         c = 0 if i%2 == 0 else 1
         r = int(i/2)
-        file_pattern = table + file_in_id
+        file_pattern = table + file_in_id + '.nc'
         dataset = xr.open_dataset(os.path.join(dir_data,file_pattern))
         n_cells = dataset['counts'].where(dataset['counts'] > 0).count(dim=['longitude','latitude'])
         n_reports = dataset['counts'].sum(dim=['longitude','latitude'])
         if filtered:
+            logging.info('...filtering time series')
             n_cells = n_cells.rolling(time=12, center=True).mean()
             n_reports = n_reports.rolling(time=12, center=True).mean()
            
-    
+        logging.info('...plotting time series')
         header_n_reports.plot(ax=ax[r,c],color=n_reports_color,zorder = 1 ,label='#reports',linewidth=5,alpha=0.15)
         n_reports.plot(ax=ax[r,c],color=n_reports_color,zorder = 3 ,label='#obs parameter')
         ax2[r,c] = ax[r,c].twinx()
