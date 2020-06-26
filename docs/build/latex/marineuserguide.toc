@@ -7,6 +7,8 @@
 \contentsline {section}{\numberline {3.3}Paths setup}{6}{section.3.3}% 
 \contentsline {chapter}{\numberline {4}Initialize a new user guide}{7}{chapter.4}% 
 \contentsline {chapter}{\numberline {5}Data summaries}{9}{chapter.5}% 
+\contentsline {section}{\numberline {5.1}Monthly grids}{9}{section.5.1}% 
+\contentsline {section}{\numberline {5.2}Monthly time series of selected quality indicators}{9}{section.5.2}% 
 \contentsline {chapter}{\numberline {6}Figures}{11}{chapter.6}% 
 \contentsline {section}{\numberline {6.1}Number of reports time series plot}{11}{section.6.1}% 
 \contentsline {section}{\numberline {6.2}Duplicate status time series plot}{11}{section.6.2}% 

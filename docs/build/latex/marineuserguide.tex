@@ -225,11 +225,13 @@ Check that the copies really reflect the merge of the releases. Edit the followi
 
 \chapter{Data summaries}
 \label{\detokenize{index:data-summaries}}
-The data summaries are aggregations of all the source\sphinxhyphen{}deck ID partitions in the
-data in monthly partitions. There are two types of data summaries:
+The data summaries are monthly aggregations of all the source\sphinxhyphen{}deck ID partitions
+in the data.
 
-1. Monthly grids. Monthly aggregations in a lat\sphinxhyphen{}lon grid which are stored in
-nc files:
+
+\section{Monthly grids}
+\label{\detokenize{index:monthly-grids}}
+These are monthly aggregations in a lat\sphinxhyphen{}lon grid which are stored in nc files:
 \begin{itemize}
 \item {} 
 header table: number of reports per grid cell per month
@@ -249,10 +251,13 @@ A launcher bash script configures the LSF job for each table and logs to /log/mo
 ./marine\PYGZhy{}user\PYGZhy{}guide/data\PYGZus{}summaries/monthly\PYGZus{}grids\PYGZus{}launcher.sh version monthly\PYGZus{}grids.json
 \end{sphinxVerbatim}
 
-2. Quality indicators time series. Monthly summaries of categorical counts of
-quality indicators aggregated over all the source\sphinxhyphen{}deck IDs. These are additionally,
-split in counts by main platform types (ships and buoys) and include the total
-number of reports. They are stored in ascii pipe separated files.
+
+\section{Monthly time series of selected quality indicators}
+\label{\detokenize{index:monthly-time-series-of-selected-quality-indicators}}
+Monthly summaries of categorical counts of quality indicators aggregated over
+all the source\sphinxhyphen{}deck IDs. These are additionally, split in counts by main
+platform types (ships and buoys) and include the total number of reports. They
+are stored in ascii pipe separated files.
 
 The configuration file, qi\_counts\_ts.json ({\hyperref[\detokenize{index:qi-counts-config}]{\sphinxcrossref{\DUrole{std,std-ref}{qi\_counts configuration}}}}), includes very limited parameterization, with the platform type segregation pending to be parameterized.
 

@@ -143,11 +143,13 @@ not match, it will prompt an error.
 Data summaries
 ==============
 
-The data summaries are aggregations of all the source-deck ID partitions in the
-data in monthly partitions. There are two types of data summaries:
+The data summaries are monthly aggregations of all the source-deck ID partitions
+in the data.
 
-1. Monthly grids. Monthly aggregations in a lat-lon grid which are stored in
-nc files:
+Monthly grids
+-------------
+
+These are monthly aggregations in a lat-lon grid which are stored in nc files:
 
   * header table: number of reports per grid cell per month
   * observations tables: number of observations and observed_value mean per grid \
@@ -165,10 +167,14 @@ A launcher bash script configures the LSF job for each table and logs to \
 
    ./marine-user-guide/data_summaries/monthly_grids_launcher.sh version monthly_grids.json
 
-2. Quality indicators time series. Monthly summaries of categorical counts of
-quality indicators aggregated over all the source-deck IDs. These are additionally,
-split in counts by main platform types (ships and buoys) and include the total
-number of reports. They are stored in ascii pipe separated files.
+
+Monthly time series of selected quality indicators
+--------------------------------------------------
+
+Monthly summaries of categorical counts of quality indicators aggregated over
+all the source-deck IDs. These are additionally, split in counts by main
+platform types (ships and buoys) and include the total number of reports. They
+are stored in ascii pipe separated files.
 
 The configuration file, qi_counts_ts.json (:ref:`qi_counts_config`), includes \
 very limited parameterization, with the platform type segregation pending to be \
