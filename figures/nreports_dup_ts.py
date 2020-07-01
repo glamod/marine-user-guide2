@@ -66,4 +66,4 @@ if __name__ == "__main__":
     ax.set_ylabel('Percent of reports')
     ax.set_xlabel('Time')
     f.tight_layout()
-    plt.savefig(file_out,bbox_inches='tight')
+    plt.savefig(file_out,bbox_inches='tight', dpi = 300)
