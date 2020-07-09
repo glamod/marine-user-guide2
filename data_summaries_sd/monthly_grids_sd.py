@@ -88,9 +88,10 @@ def main():
         kwargs['columns'] = ['latitude','longitude','observation_value']
         count_param = 'observation_value'
         
-    kwargs['filter_by_values'] = config[table]['filter_by_values']
-    for kv in list(kwargs.get('filter_by_values').items()):
-                        kwargs['filter_by_values'][(kv[0].split('.')[0],kv[0].split('.')[1])] = kwargs['filter_by_values'].pop(kv[0])
+    kwargs['filter_by_values'] = config[table].get('filter_by_values',None)
+    if kwargs['filter_by_values']:
+        for kv in list(kwargs.get('filter_by_values').items()):
+            kwargs['filter_by_values'][(kv[0].split('.')[0],kv[0].split('.')[1])] = kwargs['filter_by_values'].pop(kv[0])
     
     # CREATE CANVAS FROM PARAMS ---------------------------------------------------
     region = config['region']
