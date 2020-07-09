@@ -113,7 +113,7 @@ def main():
             sys.exit(0)
             
     for file in files_list:
-        yyyy,mm = os.path.basename(file).split(table)[1].split('-')[0:2]
+        yyyy,mm = os.path.basename(file).split(table)[1].split('-')[1:3]
         dt = datetime.datetime(int(yyyy),int(mm),1)
         if dt < start or dt > stop:
             logging.info('File {} out of requested period'.format(file))
