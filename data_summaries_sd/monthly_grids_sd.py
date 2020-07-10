@@ -60,6 +60,12 @@ def create_canvas(bbox,degree_factor):
     plot_height = int(abs(bbox[1][0]-bbox[1][1])*degree_factor)    
     return ds.Canvas(plot_width=plot_width, plot_height=plot_height, **bounds(*bbox))
 
+def to_nc(agg_arr,agg_name,out_file):
+    dims_agg = ['latitude','longitude',agg_name]
+    encodings_agg = { k:v for k,v in properties.NC_ENCODINGS.items() if k in dims_agg } 
+    agg_arr.encoding =  encodings_agg
+    agg_arr.to_netcdf(out_file,encoding = encodings_agg,mode='w')
+
 # END FUNCTIONS ---------------------------------------------------------------
         
 
@@ -101,6 +107,8 @@ def main():
     # CREATE THE MONTHLY STATS ON THE DF PARTITIONS -------------------------------
     nreports_list = []
     mean_list = []
+    max_list = []
+    min_list = []
     start = datetime.datetime(config.get('start',1600),1,1)
     stop = datetime.datetime(config.get('stop',2100),12,1)
     files_list = glob.glob(os.path.join(dir_in,'-'.join([table,'????','??',kwargs['cdm_id']]) + '.psv' ))
@@ -141,6 +149,10 @@ def main():
         if table != 'header':
             mean_arr = canvas.points(cdm_table,'longitude','latitude',ds.mean('observation_value')).assign_coords(time=dt).rename('mean')
             mean_list.append(mean_arr)
+            max_arr = canvas.points(cdm_table,'longitude','latitude',ds.max('observation_value')).assign_coords(time=dt).rename('max')
+            max_list.append(max_arr)
+            min_arr = canvas.points(cdm_table,'longitude','latitude',ds.min('observation_value')).assign_coords(time=dt).rename('min')
+            min_list.append(min_arr)
     
     #    Now this seems different with pandas to parquet, is it the engine choice?
     #    shutil.rm(parq_path)
@@ -151,19 +163,17 @@ def main():
     nreports_agg = xr.concat(nreports_list,dim = 'time')
     if table != 'header':
         mean_agg = xr.concat(mean_list,dim = 'time')
-    
-    dims_mean = ['latitude','longitude','mean']
-    encodings_mean = { k:v for k,v in properties.NC_ENCODINGS.items() if k in dims_mean } 
-    dims_counts = ['latitude','longitude','counts']
-    encodings_counts = { k:v for k,v in properties.NC_ENCODINGS.items() if k in dims_counts } 
+        max_agg = xr.concat(max_list,dim = 'time')
+        min_agg = xr.concat(min_list,dim = 'time')
     
     out_file = os.path.join(dir_out,'-'.join([table,'no_reports_grid_ts',config['id_out'] + '.nc']))
-    nreports_agg.encoding =  encodings_counts
-    nreports_agg.to_netcdf(out_file,encoding = encodings_counts,mode='w')
+    to_nc(nreports_agg,'counts',out_file)
+    
     if table != 'header':
-        out_file = os.path.join(dir_out,'-'.join([table,'mean_grid_ts',config['id_out'] + '.nc']))
-        mean_agg.encoding =  encodings_mean
-        mean_agg.to_netcdf(out_file,encoding = encodings_mean,mode='w')
+        for agg in ['mean','max','min']:
+            out_file = os.path.join(dir_out,'-'.join([table,agg + '_grid_ts',config['id_out'] + '.nc']))
+            to_nc(eval(agg + '_agg'),agg,out_file)
+
 
 if __name__ == "__main__":
     main()
