@@ -7,7 +7,7 @@ Welcome to Marine user guide's documentation!
 ==============================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
 
@@ -25,8 +25,8 @@ Introduction
 ============
 
 This project contains the necessary code to produce the data summaries that are
-included in the Marine User Guide. These help to document the status of the
-marine in situ data in the CDS after every new data release.
+included in the Marine User Guide. These help document the status of the marine
+in situ data in the CDS after every new data release.
 
 The marine data available in the CDS is the result of a series of data releases
 that are stored in the marine data file system in different directories. This
@@ -37,6 +37,10 @@ Every new data release can potentially be created with a different version of
 the marine processing software. The current version of this project is
 compatible with the glamod-marine-processing code up to version v1.2.
 
+Additionally, the tools employed to create the individual source deck reports
+are also available in this project. These can be created for a single data
+release or for the combination of releases included in a Marine User Guide
+version.
 
 Tool set-up
 ===========
@@ -81,6 +85,7 @@ This general directory needs to be created before starting using the tool.
   cd <parent_data_directory>
   mkdir marine-user-guide
 
+
 Paths setup
 -----------
 
@@ -90,13 +95,16 @@ Edit file marine-user-guide/setpaths.sh and modify as needed the following field
 * data_directory: parent path of the Marine User Guide data directory.
 
 
-Initialize a new user guide
-===========================
+Marine User Guide
+=================
 
-Every new version of the Marine User Guide (MUG) needs to be initialized in the
+Initialize a new user guide
+---------------------------
+
+Every new version of the Marine User Guide (MUG) needs to be initialised in the
 tools' data directory (:ref:`file_links`). This means:
 
-* Creating the appropiate data configuration files to reflect the combination \
+* Creating the appropriate data configuration files to reflect the combination \
   of individual data releases that generate the version.
 * Creating a subdirectory for the version in the data directory.
 * Create a view of the merged data releases: rather than copying all the \
@@ -141,13 +149,13 @@ not match, it will prompt an error.
 
 
 Data summaries
-==============
+--------------
 
 The data summaries are monthly aggregations of all the source-deck ID partitions
 in the data.
 
 Monthly grids
--------------
+^^^^^^^^^^^^^
 
 These are monthly aggregations in a lat-lon grid which are stored in nc files:
 
@@ -169,7 +177,7 @@ A launcher bash script configures the LSF job for each table and logs to \
 
 
 Monthly time series of selected quality indicators
---------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Monthly summaries of categorical counts of quality indicators aggregated over
 all the source-deck IDs. These are additionally, split in counts by main
@@ -190,14 +198,14 @@ A launcher bash script configures the LSF job for each quality indicator \
 
 
 Figures
-=======
+-------
 
 The data summaries generated are used to generatd a series of maps and time series
 plots. The following sections give the necessary directives to create them, with
 references to the configuration files used.
 
 Number of reports time series plot
-----------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Data summary used: report_quality quality indicators time series.
 * Configuration file: nreports_ts.json (:ref:`nreports_ts_config`)
@@ -210,7 +218,7 @@ Number of reports time series plot
     python /marine-user-guide/figures/nreports_ts.py nreports_ts.json
 
 Duplicate status time series plot
----------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     * Data summary used: duplicate_status quality indicators time series.
     * Configuration file: nreports_dup_ts.json (:ref:`nreports_dup_ts_config`)
@@ -224,7 +232,7 @@ Duplicate status time series plot
 
 
 Report quality time series plot
--------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     * Data summary used: report_quality quality indicators time series.
     * Configuration file: nreports_qc_ts.json (:ref:`nreports_qc_ts_config`)
@@ -237,7 +245,7 @@ Report quality time series plot
         python /marine-user-guide/figures/nreports_qc_ts.py nreports_qc_ts.json
 
 Seasonal and monthly Hovmöller plots
-------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     * Data summary used: monthly grids (counts, header and observation tables)
     * Configuration file: nreports_hovmoller.json (:ref:`nreports_hovmoller_config`)
@@ -251,7 +259,7 @@ Seasonal and monthly Hovmöller plots
 
 
 ECV nreports and converge time series
--------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     * Data summary used: monthly grids (counts, header and observation tables)
     * Configuration file: ecv_coverage_ts_grid.json (:ref:`ecv_coverage_config`)
@@ -264,7 +272,7 @@ ECV nreports and converge time series
         python /marine-user-guide/figures/ecv_coverage_ts_grid.py ecv_coverage_ts_grid.json
 
 Maps with number of observations and number of months observed
---------------------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   * Data summary used: monthly grids (counts, header and observation tables)
   * Configuration file: map_nobs_from_monthly_nc.json (:ref:`map_nobs_config`)
@@ -277,7 +285,7 @@ Maps with number of observations and number of months observed
       python /marine-user-guide/figures/map_nobs_from_monthly_nc.py map_nobs_from_monthly_nc.json
 
 Maps with ECVs mean observations value
---------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   * Data summary used: monthly grids (mean, observation tables only)
   * Configuration file: map_mean_from_monthly_nc.json (:ref:`map_mean_config`)
@@ -289,10 +297,53 @@ Maps with ECVs mean observations value
       source /marine-user-guide/setenv.sh
       python /marine-user-guide/figures/map_mean_from_monthly_nc.py map_mean_from_monthly_nc.json
 
+
+Individual source-deck reports
+==============================
+
+The source_deck_list is a simple ascii file with the list of source ID - deck ID
+pairs to process by the launcher script.
+
+Reports on a release merge
+--------------------------
+
+TBC
+
+Data data summaries
+-------------------
+The data summaries are monthly aggregations of the individual source-deck's
+table files.
+
+Monthly grids
+^^^^^^^^^^^^^
+
+These are monthly aggregations in a lat-lon grid which are stored in nc files:
+
+  * header table: number of reports per grid cell per month
+  * observations tables: number of observations and observed_value mean, max \
+    and min per grid cell per month.
+
+The aggregations for all the tables are configured in a common configuration
+file. There are currently two configurations that need to be run to create
+the data summaries needed: full dataset and optimal (all quality control
+checks passed) dataset. The corresponding configuration files are:
+
+  * Full dataset: monthly_grids_all.json (:ref:`monthly_grids_sd_all`)
+  * Optimal dataset: monthly_grids_optimal.json (:ref:`monthly_grids_sd_optimal`)
+
+A launcher bash script configures the SLURM job for each table and logs to \
+/log/sid-dck/*config_file*-*table*.log in the log directory.
+
+.. code-block:: bash
+
+   ./marine-user-guide/data_summaries_sd/monthly_grids_sd_launcher.sh log_dir config_file source_deck_list
+
+
+
 .. _appendix:
 
-Appendix. Configuration files
-=============================
+Appendix 1. Marine User Guide configuration files
+=================================================
 
 .. _level2:
 
@@ -378,6 +429,27 @@ map_mean configuration
 .. _map_nobs_config:
 
 map_nobs configuration
---------------------------
+----------------------
 
 .. literalinclude:: ../config_files/map_nobs_from_monthly_nc.json
+
+
+.. _appendix_sd:
+
+Appendix 2. Individual source-deck reports configuration files
+==============================================================
+
+.. _monthly_grids_sd_optimal:
+
+monthly grids optimal dataset
+-----------------------------
+
+.. literalinclude:: ../config_files_sd/monthly_grids_optimal.json
+
+
+.. _monthly_grids_sd_all:
+
+monthly grids full dataset
+--------------------------
+
+.. literalinclude:: ../config_files_sd/monthly_grids_all.json
