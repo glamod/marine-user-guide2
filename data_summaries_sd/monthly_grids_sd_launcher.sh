@@ -32,7 +32,7 @@ do
   for table in header observations-sst observations-at observations-dpt observations-wd observations-ws observations-slp
   do
     J=$table"_"$sid_dck
-    log_file=$log_dir_sd/$table".ok"
+    log_file=$log_dir_sd/$(basename $script_config_file .json)-$table".ok"
     failed_file=$log_dir_sd/$table".failed"
     jid=$(sbatch -J $J -o $log_file -e $log_file -p $queue -t $t --mem $mem --open-mode $om --wrap="python $pyscript $sid_dck $table $script_config_file")
     # THIS DOES NOT WORK AFTER MANY TRIES
