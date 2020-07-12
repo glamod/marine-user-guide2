@@ -154,13 +154,11 @@ def plot_lat_bands(mode,param,param_latitude_band_aggs,counts_latitude_band,max_
         
         if mode == 'optimal':
             ax2[ax_count] = ax[ax_count].twinx()
-            #ax2[ax_count].fill_between(counts_lat_df.index,0,counts_lat_df['counts optimal'].astype('float'), facecolor='Gray',alpha=0.15,interpolate=False,label='no.reports',zorder=1)
             ax2[ax_count].stackplot(counts_lat_df.index,counts_lat_df['counts optimal'].astype('float'), colors=['Gray'],alpha=0.15,interpolate=False,labels=['no.reports'],zorder=1)
             ax2[ax_count].set_ylabel('counts', color='k')
         else:
             ax2[ax_count] = ax[ax_count].twinx()
-            ax2[ax_count].fill_between(counts_lat_df.index,0,counts_lat_df['counts optimal'].astype('float'), facecolor='Gray',alpha=0.15,interpolate=False,label='qc passed',zorder=1)
-            ax2[ax_count].fill_between(counts_lat_df.index,counts_lat_df['counts optimal'].astype('float'),counts_lat_df['counts all'].astype('float'), facecolor='OrangeRed',alpha=0.35,interpolate=False,label='qc failed',zorder=2)
+            ax2[ax_count].stackplot(counts_lat_df.index,counts_lat_df['counts optimal'].astype('float'),counts_lat_df['counts all'].astype('float'),colors=['Gray','OrangeRed'],alpha=0.15,interpolate=False,labels=['qc passed','qc failed'],zorder=1)
             ax2[ax_count].plot(counts_lat_df.index,counts_lat_df['counts all'],linestyle=':',color='Grey',marker = '.',label='all reports',markersize = 2,linewidth=1,zorder=4)
             ax2[ax_count].set_ylabel('counts', color='k')
          # Now send the histogram to the back
@@ -200,6 +198,8 @@ def main():
     dir_data = os.path.join(config['dir_data'],sid_dck)
     dir_out = os.path.join(config['dir_out'],sid_dck)
 
+    no_tables = len(config['obs_tables'])
+    no_empty = 0
     for obs_table in config['obs_tables']:
         logging.info('Plotting table {}'.format(obs_table))
         param = obs_table.split('-')[1]
@@ -219,11 +219,13 @@ def main():
         if not os.path.isfile(counts_all_file):
             logging.warning('No maps found for all report types')
             logging.warning('Empty ts will not be produced')
-            sys.exit(0)
+            no_empty += 1
+            continue
         elif mode == 'optimal' and not os.path.isfile(counts_optimal_file):
             logging.warning('No maps found for quality passed records found')
             logging.warning('Empty ts will not be produced')
-            sys.exit(0)
+            no_empty += 1
+            continue
 
                 
         # Create count aggregations          
@@ -264,8 +266,6 @@ def main():
             min_value = var_properties['saturation'].get(param)[0] 
         else:    
             max_value = np.nanmax(band_max['max'].values)
-            print(type(band_max))
-            print(max_value)
             max_value = max_value + max(1,0.05*max_value)# So that extremes are clear in plot
             min_value = np.nanmin(band_min['min'].values)
             min_value = min_value - max(1,0.05*min_value) # So that extremes are clear in plot
@@ -273,5 +273,9 @@ def main():
         fig_path = os.path.join(dir_out,'-'.join([obs_table,'ts',mode]) + '.png')
         plot_lat_bands(mode,param,param_band_aggs,param_band_counts,max_value,min_value,fig_path)
 
+    if no_empty == no_tables:
+        logging.error('NO counts files found for any of the obs tables')
+        sys.exit(1)
+        
 if __name__ == '__main__':
     main()
