@@ -119,8 +119,6 @@ def plot_lat_bands(mode,param,param_latitude_band_aggs,counts_latitude_band,max_
 
         for aggregation in scalable_vdims:
             param_lat_df[aggregation].loc[param_latitude_band_aggs[aggregation]['time'].values] = param_latitude_band_aggs[aggregation].isel(latitude_bins=i).values 
-            
-        param_lat_df = param_offset + param_scale*param_lat_df
         
         counts_lat_df = pd.DataFrame(index = counts_index,columns = ['counts all','counts optimal'])
         for status in ['counts all','counts optimal']:
