@@ -9,6 +9,7 @@ import os
 import sys
 import json
 import logging
+import numpy as np
 import matplotlib.pyplot as plt
 #plt.switch_backend('agg')
 import datetime
@@ -48,12 +49,8 @@ if __name__ == "__main__":
     dir_out = os.path.join(config['dir_out'],sid_dck)
     file_in_id = config['file_in_id']
     file_out = config['file_out']
-    start_int = config['start']
-    stop_int = config['stop']
-    start = datetime.datetime(start_int,1,1)
-    stop = datetime.datetime(stop_int,12,31)   
-    
-    filtered = True
+     
+    filtered = False
     log_scale_cells = False
     log_scale_reports = True
     n_reports_color = 'FireBrick'
@@ -65,6 +62,8 @@ if __name__ == "__main__":
     table = 'header'
     file_pattern = table + file_in_id + '.nc'
     hdr_dataset = xr.open_dataset(os.path.join(dir_data,file_pattern))
+    # This is because at some point t I found them unsorted (1947-02 in 1945...)
+    hdr_dataset['time'] = np.sort(hdr_dataset['time'].values)
     header_n_cells = hdr_dataset['counts'].where(hdr_dataset['counts'] > 0).count(dim=['longitude','latitude'])
     header_n_reports = hdr_dataset['counts'].sum(dim=['longitude','latitude'])
     header_n_reports_max = header_n_reports.max()
@@ -122,8 +121,6 @@ if __name__ == "__main__":
         ax[r,c].tick_params(axis='x',labelbottom=True,labelrotation=0)
         ax[r,c].tick_params(axis='y',labelleft=True,labelrotation=0)
         ax2[r,c].ticklabel_format(axis='y', style='sci',scilimits=(-3,4))
-        ax[r,c].set_xlim([start,stop])
-        ax2[r,c].set_xlim([start,stop])
         
     lines, labels = ax[r,c].get_legend_handles_labels()
     lines2, labels2 = ax2[r,c].get_legend_handles_labels()    
