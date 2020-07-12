@@ -210,7 +210,7 @@ def main():
         offset = var_properties['offset'].get(param)
         counts_all_file = os.path.join(dir_data,'-'.join([obs_table,config.get('counts_all_id') + '.nc']))
         counts_optimal_file = os.path.join(dir_data,'-'.join([obs_table,config.get('counts_optimal_id') + '.nc']))
-        param_files = {'all','optimal'}
+        param_files = {}
         param_files['all'] = {'mean' : os.path.join(dir_data,'-'.join([obs_table,config.get('mean_all_id') + '.nc'])),
                   'max' : os.path.join(dir_data,'-'.join([obs_table,config.get('max_all_id') + '.nc'])),
                   'min' : os.path.join(dir_data,'-'.join([obs_table,config.get('min_all_id') + '.nc']))}
@@ -266,9 +266,11 @@ def main():
             max_value = var_properties['saturation'].get(param)[1]
             min_value = var_properties['saturation'].get(param)[0] 
         else:    
-            max_value = np.nanmax(band_max.values)
+            max_value = np.nanmax(band_max['max'].values)
+            print(type(band_max))
+            print(max_value)
             max_value = max_value + max(1,0.05*max_value)# So that extremes are clear in plot
-            min_value = np.nanmin(band_min.values)
+            min_value = np.nanmin(band_min['min'].values)
             min_value = min_value - max(1,0.05*min_value) # So that extremes are clear in plot
             
         fig_path = os.path.join(dir_out,'-'.join([obs_table,'ts',mode]) + '.png')
