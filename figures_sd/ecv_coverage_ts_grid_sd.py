@@ -85,8 +85,10 @@ if __name__ == "__main__":
         file_pattern = table + file_in_id + '.nc'
         if not os.path.join(dir_data,file_pattern):
             obs_avail = False
+            
         if obs_avail:
             dataset = xr.open_dataset(os.path.join(dir_data,file_pattern))
+            dataset['time'] = np.sort(dataset['time'].values)
             n_cells = dataset['counts'].where(dataset['counts'] > 0).count(dim=['longitude','latitude'])
             n_reports = dataset['counts'].sum(dim=['longitude','latitude'])
             if filtered:
