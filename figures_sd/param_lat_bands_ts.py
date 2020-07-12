@@ -155,7 +155,7 @@ def plot_lat_bands(mode,param,param_latitude_band_aggs,counts_latitude_band,max_
         if mode == 'optimal':
             ax2[ax_count] = ax[ax_count].twinx()
             #ax2[ax_count].fill_between(counts_lat_df.index,0,counts_lat_df['counts optimal'].astype('float'), facecolor='Gray',alpha=0.15,interpolate=False,label='no.reports',zorder=1)
-            ax2[ax_count].stackplot(counts_lat_df.index,counts_lat_df['counts optimal'].astype('float'), facecolor='Gray',alpha=0.15,interpolate=False,label='no.reports',zorder=1)
+            ax2[ax_count].stackplot(counts_lat_df.index,counts_lat_df['counts optimal'].astype('float'), colors=['Gray'],alpha=0.15,interpolate=False,labels=['no.reports'],zorder=1)
             ax2[ax_count].set_ylabel('counts', color='k')
         else:
             ax2[ax_count] = ax[ax_count].twinx()
