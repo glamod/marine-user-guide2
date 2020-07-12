@@ -85,7 +85,7 @@ def main():
     counts_df = pd.DataFrame()
     files_list = glob.glob(os.path.join(config['dir_data'],sid_dck,'-'.join([table,'????','??',kwargs['cdm_id']]) + '.psv' ))
     no_files = len(files_list)
-    if len(no_files) == 0:
+    if no_files == 0:
         logging.error('NO DATA FILES FOR HEADER TABLE IN DIR {}'.format(os.path.join(config['dir_data'],sid_dck)))
         sys.exit(1)
 
