@@ -83,7 +83,7 @@ if __name__ == "__main__":
         c = 0 if i%2 == 0 else 1
         r = int(i/2)
         file_pattern = table + file_in_id + '.nc'
-        if not os.path.join(dir_data,file_pattern):
+        if not os.path.isfile(os.path.join(dir_data,file_pattern)):
             obs_avail = False
             
         if obs_avail:
