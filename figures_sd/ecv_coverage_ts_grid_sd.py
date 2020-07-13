@@ -63,7 +63,7 @@ if __name__ == "__main__":
     file_pattern = table + file_in_id + '.nc'
     hdr_dataset = xr.open_dataset(os.path.join(dir_data,file_pattern))
     # This is because at some point t I found them unsorted (1947-02 in 1945...)
-    hdr_dataset['time'] = np.sort(hdr_dataset['time'].values)
+    hdr_dataset  = hdr_dataset.reindex(time=sorted(hdr_dataset.time.values))
     header_n_cells = hdr_dataset['counts'].where(hdr_dataset['counts'] > 0).count(dim=['longitude','latitude'])
     header_n_reports = hdr_dataset['counts'].sum(dim=['longitude','latitude'])
     header_n_reports_max = header_n_reports.max()
@@ -88,7 +88,7 @@ if __name__ == "__main__":
             
         if obs_avail:
             dataset = xr.open_dataset(os.path.join(dir_data,file_pattern))
-            dataset['time'] = np.sort(dataset['time'].values)
+            dataset  = dataset.reindex(time=sorted(dataset.time.values))
             n_cells = dataset['counts'].where(dataset['counts'] > 0).count(dim=['longitude','latitude'])
             n_reports = dataset['counts'].sum(dim=['longitude','latitude'])
             if filtered:
