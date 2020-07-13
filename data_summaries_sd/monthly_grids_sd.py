@@ -111,7 +111,7 @@ def main():
     min_list = []
     start = datetime.datetime(config.get('start',1600),1,1)
     stop = datetime.datetime(config.get('stop',2100),12,1)
-    files_list = glob.glob(os.path.join(dir_in,'-'.join([table,'????','??',kwargs['cdm_id']]) + '.psv' ))
+    files_list = sorted(glob.glob(os.path.join(dir_in,'-'.join([table,'????','??',kwargs['cdm_id']]) + '.psv' )))
     if len(files_list) == 0:
         if table == 'header':
             logging.error('NO DATA FILES FOR HEADER TABLE IN DIR {}'.format(dir_in))

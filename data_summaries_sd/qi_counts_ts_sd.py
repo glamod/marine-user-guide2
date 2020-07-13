@@ -83,7 +83,7 @@ def main():
     
     # CREATE THE MONTHLY STATS ON THE DF PARTITIONS ---------------------------
     counts_df = pd.DataFrame()
-    files_list = glob.glob(os.path.join(config['dir_data'],sid_dck,'-'.join([table,'????','??',kwargs['cdm_id']]) + '.psv' ))
+    files_list = sorted(glob.glob(os.path.join(config['dir_data'],sid_dck,'-'.join([table,'????','??',kwargs['cdm_id']])) + '.psv' ))
     no_files = len(files_list)
     if no_files == 0:
         logging.error('NO DATA FILES FOR HEADER TABLE IN DIR {}'.format(os.path.join(config['dir_data'],sid_dck)))
