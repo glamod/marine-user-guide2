@@ -60,8 +60,7 @@ if __name__ == "__main__":
     file_in_id = config['file_in_id']
     file_out = config['file_out']
      
-    filtered = False
-    log_scale_cells = False
+    filtered = True
     log_scale_reports = True
     n_reports_color = 'Black'
     bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.9)
@@ -77,7 +76,7 @@ if __name__ == "__main__":
     header_n_reports = hdr_dataset['counts'].sum(dim=['longitude','latitude'])
     header_n_reports_max = header_n_reports.max()
     if filtered:
-        header_n_reports = header_n_reports.rolling(time=12, center=True).mean()
+        header_n_reports = header_n_reports.rolling(time=12, center=True,min_periods=1).mean()
         
     header_n_reports_max = header_n_reports.max()    
     
@@ -102,8 +101,7 @@ if __name__ == "__main__":
             n_reports = dataset['counts'].sum(dim=['longitude','latitude'])
             if filtered:
                 logging.info('...filtering time series')
-                n_cells = n_cells.rolling(time=12, center=True).mean()
-                n_reports = n_reports.rolling(time=12, center=True).mean()
+                n_reports = n_reports.rolling(time=12, center=True,min_periods=1).mean()
            
         logging.info('...plotting time series')
         header_n_reports.plot(ax=ax[r,c],color=n_reports_color,zorder = 1 ,label='#reports',linewidth=5,alpha=0.15)
