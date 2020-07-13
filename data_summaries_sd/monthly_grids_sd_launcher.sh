@@ -35,7 +35,6 @@ do
     log_file=$log_dir_sd/$(basename $script_config_file .json)-$table".ok"
     failed_file=$log_dir_sd/$(basename $script_config_file .json)-$table".failed"
     jid=$(sbatch -J $J -o $log_file -e $log_file -p $queue -t $t --mem $mem --open-mode $om --wrap="python $pyscript $sid_dck $table $script_config_file")
-    # THIS DOES NOT WORK AFTER MANY TRIES
-    sbatch --dependency=afterok:"$jid" -p $queue -t 00:05:00 --mem 1 --open-mode $om --wrap="mv $log_file $failed_file"
+    sbatch --dependency=afternotok:${jid##* } --kill-on-invalid-dep=yes -p $queue -t 00:05:00 --mem 1 --open-mode $om --wrap="mv $log_file $failed_file"
   done
 done
