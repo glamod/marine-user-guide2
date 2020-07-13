@@ -33,6 +33,15 @@ plt.rc('ytick', labelsize=10)    # fontsize of the tick labels
 plt.rc('figure', titlesize=14)  # fontsize of the figure title
 # END PARAMS ------------------------------------------------------------------
 
+def create_index(time):
+    start_yr = time.dt.year.values[0]
+    start_mo = time.dt.month.values[0]
+    stop_yr = time.dt.year.values[-1]
+    stop_mo = time.dt.month.values[-1]
+    nmonths = ((stop_yr - start_yr) * 12) + stop_mo - start_mo + 1
+    
+    return [ datetime.datetime(start_yr,start_mo,1) + relativedelta(months=+i) for i in range(0,nmonths) ]   
+
 def flip(items, ncol):
     return itertools.chain(*[items[i::ncol] for i in range(ncol)])
 
@@ -63,6 +72,9 @@ if __name__ == "__main__":
     table = 'header'
     file_pattern = table + file_in_id + '.nc'
     hdr_dataset = xr.open_dataset(os.path.join(dir_data,file_pattern))
+    # Fill gaps in periods with NaN to avoid interpolation in plots
+    index = create_index(hdr_dataset.time)
+    hdr_dataset = hdr_dataset.reindex(time=index)
     # This is because at some point t I found them unsorted (1947-02 in 1945...)
     #hdr_dataset  = hdr_dataset.reindex(time=sorted(hdr_dataset.time.values))
     header_n_cells = hdr_dataset['counts'].where(hdr_dataset['counts'] > 0).count(dim=['longitude','latitude'])
@@ -89,16 +101,8 @@ if __name__ == "__main__":
             
         if obs_avail:
             dataset = xr.open_dataset(os.path.join(dir_data,file_pattern))
-            start = dataset.time.values[0]
-            stop = dataset.time.values[-1]
-            start_yr = dataset.time.dt.year.values[0]
-            start_mo = dataset.time.dt.month.values[0]
-            stop_yr = dataset.time.dt.year.values[-1]
-            stop_mo = dataset.time.dt.month.values[-1]
-            nmonths = ((stop_yr - start_yr) * 12) + stop_mo - start_mo + 1
-            print(start,stop,nmonths,relativedelta(months=+1))
-            index = [ datetime.datetime(start_yr,start_mo,1) + relativedelta(months=+i) for i in range(0,nmonths) ]
-            print(start,stop,index)
+            # Fill gaps in periods with NaN to avoid interpolation in plots
+            index = create_index(dataset.time)
             dataset  = dataset.reindex(time=index)
             n_cells = dataset['counts'].where(dataset['counts'] > 0).count(dim=['longitude','latitude'])
             n_reports = dataset['counts'].sum(dim=['longitude','latitude'])
