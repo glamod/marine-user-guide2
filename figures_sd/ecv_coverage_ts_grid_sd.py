@@ -91,8 +91,14 @@ if __name__ == "__main__":
             dataset = xr.open_dataset(os.path.join(dir_data,file_pattern))
             start = dataset.time.values[0]
             stop = dataset.time.values[-1]
-            nmonths = ((stop.year - start.year) * 12) + stop.month - start.month + 1
-            index = [ start + relativedelta(months=+i) for i in range(0,nmonths) ]
+            start_yr = dataset.time.dt.year.values[0]
+            start_mo = dataset.time.dt.month.values[0]
+            stop_yr = dataset.time.dt.year.values[-1]
+            stop_mo = dataset.time.dt.month.values[-1]
+            nmonths = ((stop_yr - start_yr) * 12) + stop_mo - start_mo + 1
+            print(start,stop,nmonths,relativedelta(months=+1))
+            index = [ datetime.datetime(start_yr,start_mo,1) + relativedelta(months=+i) for i in range(0,nmonths) ]
+            print(start,stop,index)
             dataset  = dataset.reindex(time=index)
             n_cells = dataset['counts'].where(dataset['counts'] > 0).count(dim=['longitude','latitude'])
             n_reports = dataset['counts'].sum(dim=['longitude','latitude'])
