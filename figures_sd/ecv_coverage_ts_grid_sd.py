@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 import datetime
 import itertools
 import xarray as xr
+from dateutil.relativedelta import relativedelta
 
 
 from figures import var_properties
@@ -88,7 +89,11 @@ if __name__ == "__main__":
             
         if obs_avail:
             dataset = xr.open_dataset(os.path.join(dir_data,file_pattern))
-            #dataset  = dataset.reindex(time=sorted(dataset.time.values))
+            start = dataset.time.values[0]
+            stop = dataset.time.values[-1]
+            nmonths = ((stop.year - start.year) * 12) + stop.month - start.month + 1
+            index = [ start + relativedelta(months=+i) for i in range(0,nmonths) ]
+            dataset  = dataset.reindex(time=index)
             n_cells = dataset['counts'].where(dataset['counts'] > 0).count(dim=['longitude','latitude'])
             n_reports = dataset['counts'].sum(dim=['longitude','latitude'])
             if filtered:
