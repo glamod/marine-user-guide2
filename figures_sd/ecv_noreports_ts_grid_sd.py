@@ -107,7 +107,7 @@ if __name__ == "__main__":
         header_n_reports.plot(ax=ax[r,c],color=n_reports_color,zorder = 1 ,label='#reports',linewidth=3,alpha=0.15)
         #header_n_reports.to_series().plot.bar(ax=ax[r,c],color=n_reports_color,zorder = 1 ,label='#reports',linewidth=0,alpha=0.15)
         if obs_avail:
-            n_reports.plot(ax=ax[r,c],color=n_reports_color,zorder = 3 ,label='#obs parameter')
+            n_reports.plot(ax=ax[r,c],color=n_reports_color,zorder = 3 ,label='#obs parameter',linewidth=1)
             #n_reports.to_series().plot.bar(ax=ax[r,c],color=n_reports_color,zorder = 3 ,label='#obs parameter',linewidth=0)
                            
         if not obs_avail:
