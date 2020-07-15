@@ -60,7 +60,7 @@ if __name__ == "__main__":
     file_in_id = config['file_in_id']
     file_out = config['file_out']
      
-    filtered = True
+    filtered = False
     log_scale_reports = True
     n_reports_color = 'Black'
     bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.9)
@@ -104,7 +104,7 @@ if __name__ == "__main__":
                 n_reports = n_reports.rolling(time=12, center=True,min_periods=1).mean()
            
         logging.info('...plotting time series')
-        header_n_reports.plot(ax=ax[r,c],color=n_reports_color,zorder = 1 ,label='#reports',linewidth=5,alpha=0.15)
+        header_n_reports.plot(ax=ax[r,c],color=n_reports_color,zorder = 1 ,label='#reports',linewidth=3,alpha=0.15)
         if obs_avail:
             n_reports.plot(ax=ax[r,c],color=n_reports_color,zorder = 3 ,label='#obs parameter')
 
