@@ -104,10 +104,12 @@ if __name__ == "__main__":
                 n_reports = n_reports.rolling(time=12, center=True,min_periods=1).mean()
            
         logging.info('...plotting time series')
-        header_n_reports.plot(ax=ax[r,c],color=n_reports_color,zorder = 1 ,label='#reports',linewidth=3,alpha=0.15)
+        #header_n_reports.plot(ax=ax[r,c],color=n_reports_color,zorder = 1 ,label='#reports',linewidth=3,alpha=0.15)
+        header_n_reports.to_series().plot.bar(ax=ax[r,c],color=n_reports_color,zorder = 1 ,label='#reports',linewidth=0,alpha=0.15)
         if obs_avail:
-            n_reports.plot(ax=ax[r,c],color=n_reports_color,zorder = 3 ,label='#obs parameter')
-
+            #n_reports.plot(ax=ax[r,c],color=n_reports_color,zorder = 3 ,label='#obs parameter')
+            n_reports.to_series().plot.bar(ax=ax[r,c],color=n_reports_color,zorder = 3 ,label='#obs parameter',linewidth=0)
+                           
         if not obs_avail:
             ax[r,c].text(0.5, 0.5,'No data',horizontalalignment='center',
                           verticalalignment='center',transform = ax[r,c].transAxes,size=20,bbox=bbox_props)
