@@ -266,7 +266,7 @@ Seasonal and monthly Hovmöller plots
         python /marine-user-guide/figures/nreports_hovmoller.py nreports_hovmoller.json
 
 
-ECV nreports and converge time series
+ECV nreports and coverage time series
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     * Data summary used: monthly grids (counts, header and observation tables)
@@ -428,6 +428,40 @@ Observed parameters latitudinal time series
       * source_deck_list: ascii file with a list of the *sid-dck* partitions to process
 
 
+Duplicate status time series plot
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Data summary used: duplicate_status quality indicators time series.
+* Command:
+
+  .. code-block:: bash
+
+    ./marine-user-guide/figures_sd/nreports_dup_ts_sd.slurm log_dir config_file source_deck_list
+
+  where:
+
+  * log_dir: is created by the launcher script if does not exist
+  * config_file: :ref:`nreports_dup_ts_sd`
+  * source_deck_list: ascii file with a list of the *sid-dck* partitions to process
+
+
+Report quality time series plot
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Data summary used: report_quality quality indicators time series.
+* Command:
+
+.. code-block:: bash
+
+  ./marine-user-guide/figures_sd/nreports_qc_ts_sd.slurm log_dir config_file source_deck_list
+
+where:
+
+* log_dir: is created by the launcher script if does not exist
+* config_file: :ref:`nreports_qc_ts_sd`
+* source_deck_list: ascii file with a list of the *sid-dck* partitions to process
+
+
 .. _appendix:
 
 Appendix 1. Marine User Guide configuration files
@@ -574,3 +608,19 @@ Observed parameters latitudinal time series
 -------------------------------------------
 
 .. literalinclude:: ../config_files_sd/param_lat_bands_ts.json
+
+
+.. _nreports_dup_ts_sd:
+
+Duplicate status time series
+----------------------------
+
+.. literalinclude:: ../config_files_sd/nreports_dup_ts_sd.json
+
+
+.. _nreports_qc_ts_sd:
+
+Report quality time series
+--------------------------
+
+.. literalinclude:: ../config_files_sd/nreports_qc_ts_sd.json
