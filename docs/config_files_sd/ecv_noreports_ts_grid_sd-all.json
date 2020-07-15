@@ -1,0 +1,6 @@
+{
+  "dir_data":"/group_workspaces/jasmin2/glamod_marine/data/release_2.0/ICOADS_R3.0.0T/level2/reports",
+  "dir_out":"/group_workspaces/jasmin2/glamod_marine/data/release_2.0/ICOADS_R3.0.0T/level2/reports",
+  "file_in_id" : "-no_reports_grid_ts-all",
+  "file_out":"ecv_coverage_ts_grid-all.png"
+  }

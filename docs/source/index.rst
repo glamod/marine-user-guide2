@@ -35,7 +35,7 @@ CDS data.
 
 Every new data release can potentially be created with a different version of
 the marine processing software. The current version of this project is
-compatible with the glamod-marine-processing code up to version v1.2.
+compatible with the glamod-marine-processing code up to version v1.1.
 
 Additionally, the tools employed to create the individual source deck reports
 are also available in this project. These can be created for a single data
@@ -71,7 +71,7 @@ Data directory setup
 --------------------
 
 The data that the tools in this project use and the products created are all
-stored in the marine-user-guide data directory, which is organized in separate
+stored in the marine-user-guide data directory [#fDDS]_, which is organized in separate
 directories to host the different versions of the Marine User Guide.
 
 .. figure:: ../pics/in_data_space.pdf
@@ -84,6 +84,14 @@ This general directory needs to be created before starting using the tool.
 
   cd <parent_data_directory>
   mkdir marine-user-guide
+
+
+
+.. rubric:: Footnotes
+
+.. [#fDDS] When producing data summaries and figures of individual source-decks \
+  of a single release, the data would normally be accessed directly from the \
+  release data directory.
 
 
 Paths setup
@@ -179,8 +187,8 @@ A launcher bash script configures the LSF job for each table and logs to \
 Monthly time series of selected quality indicators
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Monthly summaries of categorical counts of quality indicators aggregated over
-all the source-deck IDs. These are additionally, split in counts by main
+Monthly summaries of categorical counts of quality indicators in the header table
+aggregated over all the source-deck IDs. These are additionally, split in counts by main
 platform types (ships and buoys) and include the total number of reports. They
 are stored in ascii pipe separated files.
 
@@ -307,37 +315,117 @@ pairs to process by the launcher script.
 Reports on a release merge
 --------------------------
 
-TBC
+To create reports on a merge of data releases, bla,bla, with the quicklooks!
+
 
 Data data summaries
 -------------------
-The data summaries are monthly aggregations of the individual source-deck's
-table files.
+
+The data summaries are monthly aggregations of report counts, observation values
+and additional CDM fields of the individual source-deck's table files.
 
 Monthly grids
 ^^^^^^^^^^^^^
 
-These are monthly aggregations in a lat-lon grid which are stored in nc files:
+Monthly aggregations in a latitude-longitude grid, stored in nc files. The
+aggregations depend on the CDM table:
 
-  * header table: number of reports per grid cell per month
+  * header table: number of reports.
   * observations tables: number of observations and observed_value mean, max \
-    and min per grid cell per month.
+    and min.
 
 The aggregations for all the tables are configured in a common configuration
 file. There are currently two configurations that need to be run to create
 the data summaries needed: full dataset and optimal (all quality control
-checks passed) dataset. The corresponding configuration files are:
+checks passed) dataset.
 
-  * Full dataset: monthly_grids_all.json (:ref:`monthly_grids_sd_all`)
-  * Optimal dataset: monthly_grids_optimal.json (:ref:`monthly_grids_sd_optimal`)
-
-A launcher bash script configures the SLURM job for each table and logs to \
-/log/sid-dck/*config_file*-*table*.log in the log directory.
+A launcher bash script configures the SLURM job for each *sid-dck* data partition
+and each table and logs to *log_dir*/*sid-dck*/*config_file*-*table*.*ext*, with
+*ext* being *ok* or *failed* depending on job termination status.
 
 .. code-block:: bash
 
-   ./marine-user-guide/data_summaries_sd/monthly_grids_sd_launcher.sh log_dir config_file source_deck_list
+   ./marine-user-guide/data_summaries_sd/monthly_grids_sd.slurm log_dir config_file source_deck_list
 
+where:
+
+  * log_dir: is created by the launcher script if does not exist
+  * config_file:
+
+    * Full dataset: monthly_grids_all.json (:ref:`monthly_grids_sd_all`)
+    * Optimal dataset: monthly_grids_optimal.json (:ref:`monthly_grids_sd_optimal`)
+
+  * source_deck_list: ascii file with a list of the *sid-dck* partitions to process
+
+
+Monthly time series of selected quality indicators
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Monthly summaries of categorical counts of quality indicators in the header table
+for every *sid-dck* data partition. These are additionally, split in counts by
+main platform types (ships and buoys) and include the total number of reports.
+They are stored in ascii pipe separated files.
+
+The configuration file, :ref:`qi_counts_config_sd`, includes very limited
+parameterization, with the platform type segregation pending to be \
+parameterized.
+
+A launcher bash script configures the SLURM job for each *sid-dck* data partition
+and each quality indicator (currently only report_quality and duplicate_status)
+and logs to *log_dir*/*sid-dck/*config_file*-*qi*.*ext*, with *ext* being *ok*
+or *failed* depending on job termination status.
+
+.. code-block:: bash
+
+   ./marine-user-guide/data_summaries_sd/qi_counts_ts.slurm log_dir config_file source_deck_list
+
+where:
+
+  * log_dir: is created by the launcher script if does not exist
+  * config_file: :ref:`qi_counts_config_sd`
+  * source_deck_list: ascii file with a list of the *sid-dck* partitions to process
+
+
+Figures
+-------
+
+ECV number of reports time series
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    * Data summary used: monthly grids (counts, header and observation tables)
+    * Launcher script: configures the SLURM job for each *sid-dck* data partition \
+      and logs to *log_dir*/*sid-dck/*config_file*.*ext*, with *ext* being *ok* \
+      or *failed* depending on job termination status.
+
+      .. code-block:: bash
+
+        ./marine-user-guide/figures_sd/ecv_noreports_ts_grid_sd.slurm log_dir config_file source_deck_list
+
+      where:
+
+      * log_dir: is created by the launcher script if does not exist
+      * config_file: :ref:`ecv_noreports_config_sd_all`, :ref:`ecv_noreports_config_sd_optimal`
+      * source_deck_list: ascii file with a list of the *sid-dck* partitions to process
+
+
+Observed parameters latitudinal time series
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    * Data summary used: monthly grids (counts, min, max, counts from observation tables). \
+      All data and optimal dataset summaries.
+    * Launcher script: configures the SLURM job for each *sid-dck* data partition \
+      and each *mode* (all data and optimal dataset) logs to *log_dir*/*sid-dck/*config_file*-*mode*.*ext*, with *ext* being *ok* \
+      or *failed* depending on job termination status.
+
+      .. code-block:: bash
+
+        ./marine-user-guide/figures_sd/param_lat_bands_ts.slurm log_dir config_file source_deck_list
+
+      where:
+
+      * log_dir: is created by the launcher script if does not exist
+      * config_file: :ref:`param_lat_bands_ts`
+      * source_deck_list: ascii file with a list of the *sid-dck* partitions to process
 
 
 .. _appendix:
@@ -453,3 +541,36 @@ monthly grids full dataset
 --------------------------
 
 .. literalinclude:: ../config_files_sd/monthly_grids_all.json
+
+
+.. _qi_counts_config_sd:
+
+qi_counts
+---------
+
+.. literalinclude:: ../config_files_sd/qi_counts_ts.json
+
+
+.. _ecv_noreports_config_sd_all:
+
+ecv_noreports_ts_grid (all data)
+--------------------------------
+
+.. literalinclude:: ../config_files_sd/ecv_noreports_ts_grid_sd-all.json
+
+
+.. _ecv_noreports_config_sd_optimal:
+
+ecv_noreports_ts_grid (optimal dataset)
+---------------------------------------
+
+.. literalinclude:: ../config_files_sd/ecv_noreports_ts_grid_sd-optimal.json
+
+
+
+.. _param_lat_bands_ts:
+
+Observed parameters latitudinal time series
+-------------------------------------------
+
+.. literalinclude:: ../config_files_sd/param_lat_bands_ts.json
