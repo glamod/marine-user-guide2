@@ -3,7 +3,7 @@
 
 This script creates the data configuration of the Marine User Guide by
 merging the level2 configuration files of the marine data releases that 
-together are a sanpshot of the marine data available in the CDS.
+together are a snapshot of the marine data available in the CDS.
 
 The user is prompted to input the following information for every data release:
     
@@ -12,15 +12,15 @@ The user is prompted to input the following information for every data release:
     * Release level2 file: the path to the release level2 file
 
 
-On merging releases, this script warns if:
+On merging releases, this script will:
     
-    * Raises a warinig if the exclude tag for a source-deck differs 
+    * Raise a warning if the exclude tag for a source-deck differs 
     between data releases
-    * Ignores a source-deck if it has been excluded from delivery in the data 
+    * Ignore a source-deck if it has been excluded from delivery in the data 
     releases
-    * Computes the global initial and final year.
+    * Compute the merged initial and final year.
     
-This script returns outputs a file with the information merged to the path 
+This script outputs a file with the information merged to the path 
 indicated by the user.
     
 This file can also be imported as a module and contains the following
@@ -110,22 +110,24 @@ def main():
         
     global_sd = list(set(global_sd_list))
     
+    merged_dict['sid_dck'] = {}
+    
     for sd in global_sd:
-        merged_dict[sd] = {}
+        merged_dict['sid_dck'][sd] = {}
         release_in = [ x for x in release_names if merge_dicts[x].get(sd) ]
-        merged_dict[sd]['year_init'] = { release:int(merge_dicts[release][sd]['year_init']) for release in release_in }
-        merged_dict[sd]['year_end'] = { release:int(merge_dicts[release][sd]['year_end']) for release in release_in }
-        merged_dict[sd]['exclude'] = { release:merge_dicts[release][sd]['exclude'] for release in release_in }
-        merged_dict[sd]['params_exclude'] = []
+        merged_dict['sid_dck'][sd]['year_init'] = { release:int(merge_dicts[release][sd]['year_init']) for release in release_in }
+        merged_dict['sid_dck'][sd]['year_end'] = { release:int(merge_dicts[release][sd]['year_end']) for release in release_in }
+        merged_dict['sid_dck'][sd]['exclude'] = { release:merge_dicts[release][sd]['exclude'] for release in release_in }
+        merged_dict['sid_dck'][sd]['params_exclude'] = []
         for release in release_in:
-            merged_dict[sd]['params_exclude'].extend(merge_dicts[release][sd].get('params_exclude',[]))    
-        merged_dict[sd]['params_exclude'] = list(set(merged_dict[sd]['params_exclude']))
-        if len(list(set(merged_dict[sd]['exclude'].values()))) > 1:
+            merged_dict['sid_dck'][sd]['params_exclude'].extend(merge_dicts[release][sd].get('params_exclude',[]))    
+        merged_dict['sid_dck'][sd]['params_exclude'] = list(set(merged_dict['sid_dck'][sd]['params_exclude']))
+        if len(list(set(merged_dict['sid_dck'][sd]['exclude'].values()))) > 1:
             print('WARNING, EXCLUDE OPTION DIFFERS BETWEEN DATA RELEASES SID-DCK {}'.format(sd))
             print('SOLVE MANUALLY ON OUTPUT FILE')
         else:
-            merged_dict[sd]['exclude'] = list(merged_dict[sd]['exclude'].values())[0]
-        if merged_dict[sd]['exclude']:
+            merged_dict['sid_dck'][sd]['exclude'] = list(merged_dict['sid_dck'][sd]['exclude'].values())[0]
+        if merged_dict['sid_dck'][sd]['exclude']:
             print('Removing from config file excluded source-deck excluded from data release(s): {}'.format(sd))
             merged_dict.pop(sd)
       
