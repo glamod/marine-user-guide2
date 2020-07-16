@@ -30,8 +30,8 @@ in situ data in the CDS after every new data release.
 
 The marine data available in the CDS is the result of a series of data releases
 that are stored in the marine data file system in different directories. This
-project uses the data in the marine file system, rather than accessing to the
-CDS data.
+project uses the data in the marine file system, rather than accessing the CDS
+data.
 
 Every new data release can potentially be created with a different version of
 the marine processing software. The current version of this project is
@@ -70,9 +70,15 @@ follow in CEDA JASMIN, using the Jaspy toolkit.
 Data directory setup
 --------------------
 
-The data that the tools in this project use and the products created are all
-stored in the marine-user-guide data directory [#fDDS]_, which is organized in separate
-directories to host the different versions of the Marine User Guide.
+The data the tools in this project use and the products created are stored
+in the marine-user-guide data directory [#fDDS]_. This directory does not contain
+the actual data files of the individual data releases, but links to the files in
+the directories of the data releases included in a version of the Marine User Guide. This approach
+greatly simplifies the configuration of the different scripts and is followed
+even if a given version is made up of a single data release.
+
+The marine-user-guide data directory is then split in directories to host
+subsequent versions of the Marine User Guide.
 
 .. figure:: ../pics/in_data_space.pdf
   :width: 150
@@ -110,14 +116,37 @@ Initialize a new user guide
 ---------------------------
 
 Every new version of the Marine User Guide (MUG) needs to be initialised in the
-tools' data directory (:ref:`file_links`). This means:
+tools' data directory ( :ref:`file_links`). These steps initialize a new version:
 
-* Creating the appropriate data configuration files to reflect the combination \
-  of individual data releases that generate the version.
-* Creating a subdirectory for the version in the data directory.
-* Create a view of the merged data releases: rather than copying all the \
-  files to a common location, this is done by linking the level2 data from the \
-  different releases to the marine-user-guide data directory.
+1. Create the data configuration file (*mug_file*, :ref:`mug_config`) by merging \
+the level2 ( :ref:`level2`) configuration files of the different data releases \
+included in the new version.
+
+  .. code-block:: bash
+
+    python marine-user-guide/init_version/init_config.py
+
+2. Use the sid-dck keys of the *mug_config* file to create a simple ascii file \
+with the full list of source-deck IDs of the release merge (*mug_list*).
+
+3. Create a subdirectory for the version and populate it with a view of the
+merged data releases: rather than copying all the files, this is done by
+linking the corresponding files from the releases' directories to the
+marine-user-guide data directory.
+
+  .. code-block:: bash
+
+    ./marine-user-guide/init_version/merge_release_data_launcher.sh version mug_config mug_list
+
+
+  Check that the copies really reflect the merge of the releases. \
+  Edit the following script to add the corresponding paths and run. If any does \
+  not match, it will prompt an error.
+
+  .. code-block:: bash
+
+    ./marine-user-guide/init_version/merge_release_data_check.sh
+
 
 .. _file_links:
 
@@ -125,35 +154,8 @@ tools' data directory (:ref:`file_links`). This means:
   :width: 300
   :align: center
 
-  Marine User Guide data directory and its relation to the data releases directories.
+  Marine User Guide data directory and its relation to the individual data releases' directories.
 
-These steps initialize a new user guide:
-
-1. Create the data configuration file (*mug_file*,:ref:`mug_config`) by merging the level2 \
-(:ref:`level2`) configuration files of the different data releases included in the new version.
-
-.. code-block:: bash
-
-  python marine-user-guide/init_version/init_config.py
-
-2. Use the sid-dck keys of the *mug_config* file to create a simple ascii file \
-with the full list source-deck IDs of the release merge (*mug_list*).
-
-3. Create a view of the merged data releases. The launcher script also \
-initialises the subdirectory for the new version.
-
-.. code-block:: bash
-
-  ./marine-user-guide/init_version/merge_release_data_launcher.sh version mug_config mug_list
-
-
-Check that the copies really reflect the merge of the releases. \
-Edit the following script to add the corresponding paths and run. If any does \
-not match, it will prompt an error.
-
-.. code-block:: bash
-
-  ./marine-user-guide/init_version/merge_release_data_check.sh
 
 
 Data summaries
