@@ -76,7 +76,7 @@ def main():
             logging.error('{}'.format(','.join(hdr_files)))
             sys.exit(1)
         elif len(hdr_files) == 1:
-            df['C3S'] = len(query_cdm.query_monthly_table(sid_dck, table_query, yr, mm, **kwargs_query))
+            df.loc[date,'C3S'] = len(query_cdm.query_monthly_table(sid_dck, table_query, yr, mm, **kwargs_query))
         else:
             logging.warning('No level data found for {0}-{1}'.format(str(yr),str(mm).zfill(2)))  
             
