@@ -386,6 +386,26 @@ where:
   * source_deck_list: ascii file with a list of the *sid-dck* partitions to process
 
 
+Monthly time series with source to C3S IO flow
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Collection of monthly time series with the initial reports in source, selected,
+invalid and delivered to C3S for every *sid-dck* data partition.
+
+A launcher bash script configures the SLURM job for each *sid-dck* data partition
+and logs to *log_dir*/*sid-dck/*config_file*.*ext*, with *ext* being *ok* or
+*failed* depending on job termination status.
+
+.. code-block:: bash
+
+  ./marine-user-guide/data_summaries_sd/report_io.slurm log_dir config_file source_deck_list
+
+where:
+
+* log_dir: is created by the launcher script if does not exist
+* config_file: :ref:`report_io_sd`
+* source_deck_list: ascii file with a list of the *sid-dck* partitions to process
+
 Figures
 -------
 
@@ -461,6 +481,22 @@ where:
 * config_file: :ref:`nreports_qc_ts_sd`
 * source_deck_list: ascii file with a list of the *sid-dck* partitions to process
 
+
+Monthly time series with source to C3S IO flow
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Data summary used: monthly time series with IO flow
+* Command:
+
+  .. code-block:: bash
+
+    ./marine-user-guide/figures_sd/report_io.slurm log_dir config_file source_deck_list
+
+where:
+
+* log_dir: is created by the launcher script if does not exist
+* config_file: :ref:`report_io_plot_sd`
+* source_deck_list: ascii file with a list of the *sid-dck* partitions to process
 
 .. _appendix:
 
@@ -585,18 +621,27 @@ qi_counts
 .. literalinclude:: ../config_files_sd/qi_counts_ts.json
 
 
+.. _report_io_sd:
+
+Data IO flow
+------------
+
+.. literalinclude:: ../config_files_sd/report_io.json
+
+
 .. _ecv_noreports_config_sd_all:
 
-ecv_noreports_ts_grid (all data)
---------------------------------
+ecv_noreports_ts_grid plot (all data)
+-------------------------------------
 
 .. literalinclude:: ../config_files_sd/ecv_noreports_ts_grid_sd-all.json
 
 
+
 .. _ecv_noreports_config_sd_optimal:
 
-ecv_noreports_ts_grid (optimal dataset)
----------------------------------------
+ecv_noreports_ts_grid plot (optimal dataset)
+--------------------------------------------
 
 .. literalinclude:: ../config_files_sd/ecv_noreports_ts_grid_sd-optimal.json
 
@@ -604,23 +649,31 @@ ecv_noreports_ts_grid (optimal dataset)
 
 .. _param_lat_bands_ts:
 
-Observed parameters latitudinal time series
--------------------------------------------
+Observed parameters latitudinal time series plot
+------------------------------------------------
 
 .. literalinclude:: ../config_files_sd/param_lat_bands_ts.json
 
 
 .. _nreports_dup_ts_sd:
 
-Duplicate status time series
-----------------------------
+Duplicate status time series plot
+---------------------------------
 
 .. literalinclude:: ../config_files_sd/nreports_dup_ts_sd.json
 
 
 .. _nreports_qc_ts_sd:
 
-Report quality time series
---------------------------
+Report quality time series plot
+-------------------------------
 
 .. literalinclude:: ../config_files_sd/nreports_qc_ts_sd.json
+
+
+.. _report_io_plot_sd:
+
+Data IO flow plot
+-----------------
+
+.. literalinclude:: ../config_files_sd/report_io_plot.json
