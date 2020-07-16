@@ -37,7 +37,6 @@ def main():
 
     sid_dck = sys.argv[1]
     config_file = sys.argv[2]
-    periods_file = sys.argv[3]
 
     with open(config_file,'r') as fO:
         config = json.load(fO)  
@@ -49,7 +48,7 @@ def main():
     sd_paths['dir_data'] = os.path.join(config['dir_data'],sid_dck)
     sd_paths['dir_out'] = os.path.join(config['dir_out'],sid_dck)
     sd_paths['level1a_ql'] = os.path.join(config['dir_level1a_ql'],sid_dck)
-    sd_paths['level1c_ql'] = os.path.join(config['dir_level1a_ql'],sid_dck)
+    sd_paths['level1c_ql'] = os.path.join(config['dir_level1c_ql'],sid_dck)
     
     with open(periods_file,'r') as fO:
         periods = json.load(fO) 
@@ -66,9 +65,11 @@ def main():
         yr = date.year
         mm = date.month
         yr_mo = date.strftime('%Y-%m')
-        
+       
+
+        logging.info('Processing {}'.format(yr_mo)) 
         # C3S data counts
-        hdr_path = os.path.join(sd_paths['data'],'-'.join(['header',str(yr),str(mm).zfill(2)]) + '-*.psv')
+        hdr_path = os.path.join(sd_paths['dir_data'],'-'.join(['header',str(yr),str(mm).zfill(2)]) + '-*.psv')
         hdr_files = glob.glob(hdr_path)
         if len(hdr_files) > 1:
             logging.error('Multiple files found for {0}-{1}'.format(str(yr),str(mm).zfill(2))) 
