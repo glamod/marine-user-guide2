@@ -2,7 +2,7 @@
 source ../setpaths.sh
 
 sd_dck_list='/gws/smf/j04/c3s311a_lot2/code/marine_code/glamod-marine-config/marine-user-guide/v4/mug_v4_list.txt'
-v4=$mug_data_directory/v4
+v4=$mug_data_directory/v4/level2
 r1=$data_directory/r092019/ICOADS_R3.0.0T/level2
 r2=$data_directory/release_2.0/ICOADS_R3.0.0T/level2
 
