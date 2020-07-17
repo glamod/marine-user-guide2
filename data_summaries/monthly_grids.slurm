@@ -31,9 +31,9 @@ for table in header observations-sst observations-at observations-dpt observatio
 do
 
   J=$table
-  log_file=$log_dir/$(basename $script_config_file .json)".ok"
+  log_file=$log_dir/$(basename $script_config_file .json)-$table".ok"
   if [ -f "$log_file" ];then rm $log_file;fi
-  failed_file=$log_dir/$(basename $script_config_file .json)".failed"
+  failed_file=$log_dir/$(basename $script_config_file .json)-$table".failed"
   if [ -f "$failed_file" ];then rm $failed_file;fi
 
   jid=$(sbatch -J $J -o $log_file -e $log_file -p $queue -t $t --mem $mem --open-mode $om --wrap="python $pyscript $table")
