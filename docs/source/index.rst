@@ -112,8 +112,12 @@ Edit file marine-user-guide/setpaths.sh and modify as needed the following field
 Marine User Guide
 =================
 
-Initialize a new user guide
----------------------------
+Every C3S Marine User Guide version includes a series of figures that describe
+the marine in situ data holdings in the CDS. The following sections explain how
+these figures are created for every new version of the Marine User Guide.
+
+Initializing a new user guide
+-----------------------------
 
 Every new version of the Marine User Guide (MUG) needs to be initialised in the
 tools' data directory ( :ref:`file_links`). These steps initialize a new version:
@@ -129,15 +133,34 @@ included in the new version.
 2. Use the sid-dck keys of the *mug_config* file to create a simple ascii file \
 with the full list of source-deck IDs of the release merge (*mug_list*).
 
-3. Create a subdirectory for the version and populate it with a view of the
-merged data releases: rather than copying all the files, this is done by
-linking the corresponding files from the releases' directories to the
-marine-user-guide data directory.
+3. Create the directory tree for the version in the  in the marine-user-guide \
+data directory.
 
   .. code-block:: bash
 
-    ./marine-user-guide/init_version/merge_release_data_launcher.sh version mug_config mug_list
+    python /marine-user-guide/init_version/create_version_dir_tree.py mug_path version mug_config
 
+  where:
+
+  * mug_path: full marine-user-guide data directory path
+  * version: tag to use for Marine User Guide version
+  * mug_config: path to *mug_config* file
+
+4. Populate it with a view of the merged data releases: rather than copying all \
+the files, this is done by linking the corresponding files from the releases' \
+directories to the marine-user-guide data directory. Data linked is the level2 \
+data files and level1a and level1c quicklook json files.
+
+  .. code-block:: bash
+
+    ./marine-user-guide/init_version/merge_release_data.py data_path mug_path version mug_config
+
+  where:
+
+  * data_path: the path where the data release directories are
+  * mug_path: full marine-user-guide data directory path
+  * version: tag to use for Marine User Guide version
+  * mug_config: path to *mug_config* file
 
   Check that the copies really reflect the merge of the releases. \
   Edit the following script to add the corresponding paths and run. If any does \
@@ -154,29 +177,36 @@ marine-user-guide data directory.
   :width: 300
   :align: center
 
-  Marine User Guide data directory and its relation to the individual data releases' directories.
+  Marine User Guide data directory and its relation to the individual data \
+  releases' directories.
 
 
 
 Data summaries
 --------------
 
-The data summaries are monthly aggregations of all the source-deck ID partitions
-in the data.
+The data summaries are monthly aggregations over all the source-deck ID partitions
+in the data. These aggregations are on the data counts and observation values
+and on some relevant quality indicators and are the basis to then create the
+time series plots and maps included in the MUG.
 
 Monthly grids
 ^^^^^^^^^^^^^
 
-These are monthly aggregations in a lat-lon grid which are stored in nc files:
+Aggregations in a monthly lat-lon grids. The CDM table determines what
+aggregations are aplied:
 
-  * header table: number of reports per grid cell per month
-  * observations tables: number of observations and observed_value mean per grid \
+  * header table: number of reports per grid cell per month.
+  * observations tables: number of observations and mean observed_value per grid \
     cell per month.
 
-All the aggregations are configured in a common configuration file, \
-monthly_grids.json (:ref:`mon_grids_config`). The current configuration excludes
-reports not passing all the quality checks, but this can be configured in the
-configuration file.
+Each aggregation is stored in an individual netcdf file.
+
+All the aggregations are configured in a common configuration file,
+(:ref:`mon_grids_um`). The current configuration for the MUG excludes reports
+not passing all the quality checks. The same tool can be used to produce
+data summaries with different filter criteria, but modifying the filter values
+in the configuration file.
 
 A launcher bash script configures the LSF job for each table and logs to \
 /log/monthly_grids/*table*.log in the data directory.
@@ -186,15 +216,15 @@ A launcher bash script configures the LSF job for each table and logs to \
    ./marine-user-guide/data_summaries/monthly_grids_launcher.sh version monthly_grids.json
 
 
-Monthly time series of selected quality indicators
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Selected quality indicators time series
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Monthly summaries of categorical counts of quality indicators in the header table
 aggregated over all the source-deck IDs. These are additionally, split in counts by main
 platform types (ships and buoys) and include the total number of reports. They
 are stored in ascii pipe separated files.
 
-The configuration file, qi_counts_ts.json (:ref:`qi_counts_config`), includes \
+The configuration file, qi_counts_ts.json (:ref:`qi_counts_um`), includes \
 very limited parameterization, with the platform type segregation pending to be \
 parameterized.
 
@@ -527,18 +557,18 @@ Marine user guide data configuration file
 
 
 
-.. _mon_grids_config:
+.. _mon_grids_um:
 
-monthly_grids configuration
----------------------------
+Monthly grids
+-------------
 
 .. literalinclude:: ../config_files/monthly_grids.json
 
 
-.. _qi_counts_config:
+.. _qi_counts_um:
 
-qi_counts configuration
------------------------
+Quality indicators time series
+------------------------------
 
 .. literalinclude:: ../config_files/qi_counts_ts.json
 
