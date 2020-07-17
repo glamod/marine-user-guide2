@@ -41,6 +41,7 @@ do
 
   J=$sid_dck
   log_file=$log_dir_sd/merge_release_data.ok
+  if [ -f "$log_file" ];then rm $log_file;fi
   failed_file=$log_dir_sd/merge_release_data.failed
   if [ -f "$failed_file" ];then rm $failed_file;fi
   jid=$(sbatch -J $J -o $log_file -e $log_file -p $queue -t $t --mem $mem --open-mode $om --wrap="python $pyscript $sid_dck")
