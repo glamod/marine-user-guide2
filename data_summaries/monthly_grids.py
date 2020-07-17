@@ -66,8 +66,8 @@ def main():
     logging.basicConfig(format='%(levelname)s\t[%(asctime)s](%(filename)s)\t%(message)s',
                         level=logging.INFO,datefmt='%Y%m%d %H:%M:%S',filename=None)
     
-    table = sys.argv[1]
-    config_file = sys.argv[2]
+    config_file = sys.argv[1]
+    table = sys.argv[2]
     
     with open(config_file,'r') as fO:
         config = json.load(fO)
@@ -147,7 +147,7 @@ def main():
     dims_counts = ['latitude','longitude','counts']
     encodings_counts = { k:v for k,v in properties.NC_ENCODINGS.items() if k in dims_counts } 
     
-    out_file = os.path.join(config['dir_out'],'-'.join([table,'no_reports_grid_ts',config['id_out'] + '.nc']))
+    out_file = os.path.join(config['dir_out'],'-'.join([table,'reports_grid_ts',config['id_out'] + '.nc']))
     nreports_agg.encoding =  encodings_counts
     nreports_agg.to_netcdf(out_file,encoding = encodings_counts,mode='w')
     if table != 'header':
