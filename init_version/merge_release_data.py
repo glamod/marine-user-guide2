@@ -68,14 +68,14 @@ def main():
     # Create the directory structure
 
     mug_version_path = os.path.join(params.mug_path,params.mug_version)
-    logging.info('Creating dir {}'.path(mug_version_path))
+    logging.info('Creating dir {}'.format(mug_version_path))
     create_subdir(params.mug_path,params.mug_version)
     
-    logging.info('Adding levels: {}'.path(','.join(LEVELS)))
+    logging.info('Adding levels: {}'.format(','.join(LEVELS)))
     create_subdir(mug_version_path,LEVELS)
     
     for level in LEVELS:
-        logging.info('Level {}, adding source-deck directories and subdirectories'.path(level))
+        logging.info('Level {}, adding source-deck directories and subdirectories'.format(level))
         level_subdir = os.path.join(mug_version_path,level)
         create_subdir(level_subdir,sid_list)
         create_subdir(level_subdir,level_subdirs[level])
@@ -86,25 +86,31 @@ def main():
     # Now link the data files from the release directories
     for sd in sid_list:
         
-        sd_release_list = list(mug_config[sd].get('year_init').keys())
+        sd_release_list = list(mug_config['sid_dck'][sd].get('year_init').keys())
         sd_dataset_dict = { rel:dataset_dict[rel] for rel in sd_release_list }
          
         # merge level2 data
+        logging.info('Linking level2 files')
         sd_paths = { k:os.path.join(params.data_path,k,v,'level2',sd,'*.psv') for k,v in sd_dataset_dict.items() }
         sd_path_um = os.path.join(params.data_path,'marine-user-guide',params.mug_version,'level2',sd)
         for release in sd_release_list:
+            logging.info('...release {}'.format(release))
             call(' '.join(['cp -s',sd_paths.get(release),sd_path_um]),shell=True)  
             
         # merge level1a json quicklooks 
+        logging.info('Linking level1a ql files')
         sd_paths = { k:os.path.join(params.data_path,k,v,'level1a','quicklooks',sd,'*.json') for k,v in sd_dataset_dict.items() }
         sd_path_um = os.path.join(params.data_path,'marine-user-guide',params.mug_version,'level1a','quicklooks',sd)
         for release in sd_release_list:
+            logging.info('...release {}'.format(release))
             call(' '.join(['cp -s',sd_paths.get(release),sd_path_um]),shell=True)  
             
         # merge level1c json quicklooks 
+        logging.info('Linking level1c ql files')
         sd_paths = { k:os.path.join(params.data_path,k,v,'level1c','quicklooks',sd,'*.json') for k,v in sd_dataset_dict.items() }
         sd_path_um = os.path.join(params.data_path,'marine-user-guide',params.mug_version,'level1c','quicklooks',sd)
         for release in sd_release_list:
+            logging.info('...release {}'.format(release))
             call(' '.join(['cp -s',sd_paths.get(release),sd_path_um]),shell=True)  
     
     sys.exit(0)
