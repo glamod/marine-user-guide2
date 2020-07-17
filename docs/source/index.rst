@@ -143,6 +143,8 @@ included in the new version ( :ref:`level2`).
 
   .. code-block:: bash
 
+    source marine-user-guide/setpaths.sh
+    source marine-user-guide/setenv.sh
     python marine-user-guide/init_version/init_config.py
 
 2. Use the sid-dck keys of the *mug_config* file to create a simple ascii file \
@@ -153,6 +155,8 @@ data directory.
 
   .. code-block:: bash
 
+    source marine-user-guide/setpaths.sh
+    source marine-user-guide/setenv.sh
     python /marine-user-guide/init_version/create_version_dir_tree.py mug_path version mug_config
 
   where:
@@ -168,20 +172,21 @@ data files and level1a and level1c quicklook json files.
 
   .. code-block:: bash
 
-    ./marine-user-guide/init_version/merge_release_data.slurm version mug_config
+    ./marine-user-guide/init_version/merge_release_data.slurm version mug_config mug_list
 
   where:
 
   * version: tag to use for Marine User Guide version
   * mug_config: path to *mug_config* file
+  * mug_list: path to *mug_list* file.
 
-  Check that the copies really reflect the merge of the releases. \
-  Edit the following script to add the corresponding paths and run. If any does \
-  not match, it will prompt an error.
+5. Check that the copies really reflect the merge of the releases. \
+Edit the following script to add the corresponding paths and run. If any does \
+not match, it will prompt an error.
 
-  .. code-block:: bash
+.. code-block:: bash
 
-    ./marine-user-guide/init_version/merge_release_data_check.sh
+  ./marine-user-guide/init_version/merge_release_data_check.sh
 
 
 Data summaries
