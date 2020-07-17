@@ -57,7 +57,7 @@ def main():
     # merge level2 data
     logging.info('Linking level2 files')
     sd_paths = { k:os.path.join(params.data_path,k,v,'level2',params.sd,'*.psv') for k,v in sd_dataset_dict.items() }
-    sd_path_um = os.path.join(params.data_path,'marine-user-guide',params.mug_version,'level2',params.sd)
+    sd_path_um = os.path.join(params.mug_path,'level2',params.sd)
     for release in sd_release_list:
         logging.info('...release {}'.format(release))
         call(' '.join(['cp -s',sd_paths.get(release),sd_path_um]),shell=True)  
@@ -65,7 +65,7 @@ def main():
     # merge level1a json quicklooks 
     logging.info('Linking level1a ql files')
     sd_paths = { k:os.path.join(params.data_path,k,v,'level1a','quicklooks',params.sd,'*.json') for k,v in sd_dataset_dict.items() }
-    sd_path_um = os.path.join(params.data_path,'marine-user-guide',params.mug_version,'level1a','quicklooks',params.sd)
+    sd_path_um = os.path.join(params.mug_path,'level1a','quicklooks',params.sd)
     for release in sd_release_list:
         logging.info('...release {}'.format(release))
         call(' '.join(['cp -s',sd_paths.get(release),sd_path_um]),shell=True)  
@@ -73,7 +73,7 @@ def main():
     # merge level1c json quicklooks 
     logging.info('Linking level1c ql files')
     sd_paths = { k:os.path.join(params.data_path,k,v,'level1c','quicklooks',params.sd,'*.json') for k,v in sd_dataset_dict.items() }
-    sd_path_um = os.path.join(params.data_path,'marine-user-guide',params.mug_version,'level1c','quicklooks',params.sd)
+    sd_path_um = os.path.join(params.mug_path,'level1c','quicklooks',params.sd)
     for release in sd_release_list:
         logging.info('...release {}'.format(release))
         call(' '.join(['cp -s',sd_paths.get(release),sd_path_um]),shell=True)  

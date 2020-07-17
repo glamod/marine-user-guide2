@@ -22,9 +22,12 @@ process_list=$(readlink --canonicalize $3)
 pyscript="$mug_code_directory/init_version/merge_release_data.py $data_directory $mug_data_directory/$version $script_config_file"
 log_dir=$mug_data_directory/$version/level2/log
 if [ ! -d $log_dir ]
+then
   echo "LOG dir does not exist: $log_dir"
   exit
 fi
+
+echo "LOG directory is $log_dir"
 
 
 for sid_dck in $(awk '{print $1}' $process_list)
@@ -35,9 +38,11 @@ do
     echo "Source-deck LOG dir does not exist: $log_dir_sd"
     exit
   fi
+
   J=$sid_dck
   log_file=$log_dir_sd/merge_release_data.ok
   failed_file=$log_dir_sd/merge_release_data.failed
+  if [ -f "$failed_file" ];then rm $failed_file;fi
   jid=$(sbatch -J $J -o $log_file -e $log_file -p $queue -t $t --mem $mem --open-mode $om --wrap="python $pyscript $sid_dck")
   sbatch --dependency=afternotok:${jid##* } --kill-on-invalid-dep=yes -p $queue -t 00:05:00 --mem 1 --open-mode $om --wrap="mv $log_file $failed_file"
 done
