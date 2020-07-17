@@ -106,7 +106,10 @@ Paths setup
 Edit file marine-user-guide/setpaths.sh and modify as needed the following fields:
 
 * code_directory: parent path of the repository installation.
-* data_directory: parent path of the Marine User Guide data directory.
+* data_directory: parent path to the data release directories.
+* mug_code_directory: marine user guide code directory installation.
+* mug_data_directory: marine user guide data directory path.
+
 
 
 Marine User Guide
@@ -120,11 +123,23 @@ Initializing a new user guide
 -----------------------------
 
 Every new version of the Marine User Guide (MUG) needs to be initialised in the
-tools' data directory ( :ref:`file_links`). These steps initialize a new version:
+tools' data directory as shown in the figure.
+
+.. _file_links:
+
+.. figure:: ../pics/file_links.png
+  :width: 300
+  :align: center
+
+  Marine User Guide data directory and its relation to the individual data \
+  releases' directories.
+
+
+These steps initialize a new version:
 
 1. Create the data configuration file (*mug_file*, :ref:`mug_config`) by merging \
-the level2 ( :ref:`level2`) configuration files of the different data releases \
-included in the new version.
+the level2 configuration files of the different data releases \
+included in the new version ( :ref:`level2`).
 
   .. code-block:: bash
 
@@ -142,7 +157,7 @@ data directory.
 
   where:
 
-  * mug_path: full marine-user-guide data directory path
+  * mug_path: full path to the marine-user-guide data directory
   * version: tag to use for Marine User Guide version
   * mug_config: path to *mug_config* file
 
@@ -153,12 +168,10 @@ data files and level1a and level1c quicklook json files.
 
   .. code-block:: bash
 
-    ./marine-user-guide/init_version/merge_release_data.py data_path mug_path version mug_config
+    ./marine-user-guide/init_version/merge_release_data.slurm version mug_config
 
   where:
 
-  * data_path: the path where the data release directories are
-  * mug_path: full marine-user-guide data directory path
   * version: tag to use for Marine User Guide version
   * mug_config: path to *mug_config* file
 
@@ -169,17 +182,6 @@ data files and level1a and level1c quicklook json files.
   .. code-block:: bash
 
     ./marine-user-guide/init_version/merge_release_data_check.sh
-
-
-.. _file_links:
-
-.. figure:: ../pics/file_links.png
-  :width: 300
-  :align: center
-
-  Marine User Guide data directory and its relation to the individual data \
-  releases' directories.
-
 
 
 Data summaries
