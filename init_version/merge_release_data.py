@@ -8,41 +8,29 @@ directory in the User Guide directory in the data space.
 
 Input arguments to this script are:
     
-    * data_path: path to the general marine data directory
-    * mug_version: tag for Marine User Guide version (ie.'v4')
-    * mug_config_file: path to the Marine User Guide data configuration file
     * sd: source-deck id (sss-ddd)
+    * data_path: path to the general marine data directory
+    * mug_path: path to the data directory of the marine user guide version
+    * mug_config_file: path to the Marine User Guide data configuration file
+    
 """
 import sys
 import os
 import json
 import logging
-import shutil
 from subprocess import call
 from imp import reload
 reload(logging)  # This is to override potential previous config of logging
 
-# PARAMS ----------------------------------------------------------------------
-LEVELS = ['level1a','level1c','level2']
-level_subdirs = {}
-level_subdirs['level1a'] = ['quicklooks']
-level_subdirs['level1c'] = ['quicklooks']
-level_subdirs['level2'] = ['log','reports']
 
 # FUNCTIONS -------------------------------------------------------------------
 class script_setup:
     def __init__(self, inargs):
         self.data_path = inargs[1]
         self.mug_path = inargs[2]
-        self.mug_version = inargs[3]
-        self.mug_config_file = inargs[4]
-        
-def create_subdir(lpath,subdir_list):
-    subdir_list = [subdir_list] if isinstance(subdir_list,str) else subdir_list
-    for subdir in subdir_list:
-        subdir_dir = os.path.join(lpath,subdir)
-        if not os.path.isdir(subdir_dir):
-            os.mkdir(subdir_dir,0o774)
+        self.mug_config_file = inargs[3]
+        self.sd = inargs[4]
+
 # MAIN ------------------------------------------------------------------------
 def main():
     # Process input and set up some things and make sure we can do something---
@@ -62,56 +50,33 @@ def main():
         mug_config = json.load(fO)
     
     dataset_dict = mug_config.get('dataset_names')
-    
-    sid_list = list(mug_config['sid_dck'].keys())
-    
-    # Create the directory structure
 
-    mug_version_path = os.path.join(params.mug_path,params.mug_version)
-    logging.info('Creating dir {}'.format(mug_version_path))
-    create_subdir(params.mug_path,params.mug_version)
-    
-    logging.info('Adding levels: {}'.format(','.join(LEVELS)))
-    create_subdir(mug_version_path,LEVELS)
-    
-    for level in LEVELS:
-        logging.info('Level {}, adding source-deck directories and subdirectories'.format(level))
-        level_subdir = os.path.join(mug_version_path,level)
-        create_subdir(level_subdir,sid_list)
-        create_subdir(level_subdir,level_subdirs[level])
-
-        for sublevel in level_subdirs.get(level):
-            create_subdir(os.path.join(level_subdir,sublevel),sid_list)
-    
-    # Now link the data files from the release directories
-    for sd in sid_list:
+    sd_release_list = list(mug_config['sid_dck'][params.sd].get('year_init').keys())
+    sd_dataset_dict = { rel:dataset_dict[rel] for rel in sd_release_list }
+     
+    # merge level2 data
+    logging.info('Linking level2 files')
+    sd_paths = { k:os.path.join(params.data_path,k,v,'level2',params.sd,'*.psv') for k,v in sd_dataset_dict.items() }
+    sd_path_um = os.path.join(params.data_path,'marine-user-guide',params.mug_version,'level2',params.sd)
+    for release in sd_release_list:
+        logging.info('...release {}'.format(release))
+        call(' '.join(['cp -s',sd_paths.get(release),sd_path_um]),shell=True)  
         
-        sd_release_list = list(mug_config['sid_dck'][sd].get('year_init').keys())
-        sd_dataset_dict = { rel:dataset_dict[rel] for rel in sd_release_list }
-         
-        # merge level2 data
-        logging.info('Linking level2 files')
-        sd_paths = { k:os.path.join(params.data_path,k,v,'level2',sd,'*.psv') for k,v in sd_dataset_dict.items() }
-        sd_path_um = os.path.join(params.data_path,'marine-user-guide',params.mug_version,'level2',sd)
-        for release in sd_release_list:
-            logging.info('...release {}'.format(release))
-            call(' '.join(['cp -s',sd_paths.get(release),sd_path_um]),shell=True)  
-            
-        # merge level1a json quicklooks 
-        logging.info('Linking level1a ql files')
-        sd_paths = { k:os.path.join(params.data_path,k,v,'level1a','quicklooks',sd,'*.json') for k,v in sd_dataset_dict.items() }
-        sd_path_um = os.path.join(params.data_path,'marine-user-guide',params.mug_version,'level1a','quicklooks',sd)
-        for release in sd_release_list:
-            logging.info('...release {}'.format(release))
-            call(' '.join(['cp -s',sd_paths.get(release),sd_path_um]),shell=True)  
-            
-        # merge level1c json quicklooks 
-        logging.info('Linking level1c ql files')
-        sd_paths = { k:os.path.join(params.data_path,k,v,'level1c','quicklooks',sd,'*.json') for k,v in sd_dataset_dict.items() }
-        sd_path_um = os.path.join(params.data_path,'marine-user-guide',params.mug_version,'level1c','quicklooks',sd)
-        for release in sd_release_list:
-            logging.info('...release {}'.format(release))
-            call(' '.join(['cp -s',sd_paths.get(release),sd_path_um]),shell=True)  
+    # merge level1a json quicklooks 
+    logging.info('Linking level1a ql files')
+    sd_paths = { k:os.path.join(params.data_path,k,v,'level1a','quicklooks',params.sd,'*.json') for k,v in sd_dataset_dict.items() }
+    sd_path_um = os.path.join(params.data_path,'marine-user-guide',params.mug_version,'level1a','quicklooks',params.sd)
+    for release in sd_release_list:
+        logging.info('...release {}'.format(release))
+        call(' '.join(['cp -s',sd_paths.get(release),sd_path_um]),shell=True)  
+        
+    # merge level1c json quicklooks 
+    logging.info('Linking level1c ql files')
+    sd_paths = { k:os.path.join(params.data_path,k,v,'level1c','quicklooks',params.sd,'*.json') for k,v in sd_dataset_dict.items() }
+    sd_path_um = os.path.join(params.data_path,'marine-user-guide',params.mug_version,'level1c','quicklooks',params.sd)
+    for release in sd_release_list:
+        logging.info('...release {}'.format(release))
+        call(' '.join(['cp -s',sd_paths.get(release),sd_path_um]),shell=True)  
     
     sys.exit(0)
 
