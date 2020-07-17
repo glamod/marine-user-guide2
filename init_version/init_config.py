@@ -129,7 +129,7 @@ def main():
             merged_dict['sid_dck'][sd]['exclude'] = list(merged_dict['sid_dck'][sd]['exclude'].values())[0]
         if merged_dict['sid_dck'][sd]['exclude']:
             print('Removing from config file excluded source-deck excluded from data release(s): {}'.format(sd))
-            merged_dict.pop(sd)
+            merged_dict['sid_dck'].pop(sd)
       
     with open(out_path,'w') as fO:
         json.dump(merged_dict,fO,indent=4)
