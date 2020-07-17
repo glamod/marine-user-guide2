@@ -170,6 +170,10 @@ the files, this is done by linking the corresponding files from the releases' \
 directories to the marine-user-guide data directory. Data linked is the level2 \
 data files and level1a and level1c quicklook json files.
 
+A launcher bash script configures the SLURM job for each *sid-dck* data partition
+and logs to level2/log/*sid-dck*/merge_release_data.*ext*, with *ext* being *ok* or
+*failed* depending on job termination status.
+
   .. code-block:: bash
 
     ./marine-user-guide/init_version/merge_release_data.slurm version mug_config mug_list
@@ -201,7 +205,7 @@ Monthly grids
 ^^^^^^^^^^^^^
 
 Aggregations in a monthly lat-lon grids. The CDM table determines what
-aggregations are aplied:
+aggregations are applied:
 
   * header table: number of reports per grid cell per month.
   * observations tables: number of observations and mean observed_value per grid \
@@ -210,17 +214,23 @@ aggregations are aplied:
 Each aggregation is stored in an individual netcdf file.
 
 All the aggregations are configured in a common configuration file,
-(:ref:`mon_grids_um`). The current configuration for the MUG excludes reports
+:ref:`mon_grids_um`. The current configuration for the MUG excludes reports
 not passing all the quality checks. The same tool can be used to produce
 data summaries with different filter criteria, but modifying the filter values
 in the configuration file.
 
-A launcher bash script configures the LSF job for each table and logs to \
-/log/monthly_grids/*table*.log in the data directory.
+A launcher bash script configures the SLURM job for each CDM table and logs
+to level2/log/*sid-dck*/*config_file*-*table*.*ext*, with *ext* being *ok* or
+*failed* depending on job termination status.
 
 .. code-block:: bash
 
-   ./marine-user-guide/data_summaries/monthly_grids_launcher.sh version monthly_grids.json
+   ./marine-user-guide/data_summaries/monthly_grids.slurm version config_file
+
+where:
+
+* version: tag to use for Marine User Guide version
+* config_file: path to the monthly grids configuration file
 
 
 Selected quality indicators time series
