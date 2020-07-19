@@ -22,8 +22,11 @@ script_config_file=$(readlink --canonicalize $2)
 process_list=$(readlink --canonicalize $3)
 
 pyscript=$mug_code_directory/data_summaries_sd/monthly_grids_sd.py
-if [ ! -d $log_dir ]; then mkdir -p $log_dir; fi
-echo "LOG DIR IS $log_dir"
+if [ ! -d $log_dir ]
+then
+  echo "LOG dir does not exist: $log_dir"
+  exit
+fi
 
 for sid_dck in $(awk '{print $1}' $process_list)
 do
