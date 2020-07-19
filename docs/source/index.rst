@@ -468,25 +468,32 @@ where:
   * source_deck_list: ascii file with a list of the *sid-dck* partitions to process
 
 
+.. _report_io_sd_section:
+
 Monthly time series with source to C3S IO flow
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Collection of monthly time series with the initial reports in source, selected,
-invalid and delivered to C3S for every *sid-dck* data partition.
+Collection of monthly time series that describe the main report IO flow, from
+the initial reports in the source dataset to those finally delivered to C3S for
+every *sid-dck* data partition.
 
 A launcher bash script configures a SLURM job for each *sid-dck* data partition
-and logs to *log_dir*/*sid-dck/*config_file*.*ext*, with *ext* being *ok* or
+and logs to *log_dir*/*sid-dck*/*config_file*.*ext*, with *ext* being *ok* or
 *failed* depending on job termination status.
 
 .. code-block:: bash
 
-  ./marine-user-guide/data_summaries_sd/report_io.slurm log_dir config_file source_deck_list
+  ./marine-user-guide/data_summaries_sd/report_io_sd.slurm log_dir report_io_sd.json source_deck_list
 
 where:
 
-* log_dir: is created by the launcher script if does not exist
-* config_file: :ref:`report_io_sd`
+* log_dir: the logging directory is assumed to be split in the source-deck data
+  partitions. It is normally */level2/log* in the directory where the data is.
+  It needs to be input to the launcher as this script can be run either on the
+  individual release directories or on the marine-user-guide data directories.
+* report_io_sd.json: :ref:`report_io_sd`
 * source_deck_list: ascii file with a list of the *sid-dck* partitions to process
+
 
 Figures
 -------
@@ -572,7 +579,7 @@ Monthly time series with source to C3S IO flow
 
   .. code-block:: bash
 
-    ./marine-user-guide/figures_sd/report_io.slurm log_dir config_file source_deck_list
+    ./marine-user-guide/figures_sd/report_io_sd.slurm log_dir config_file source_deck_list
 
 where:
 
@@ -720,7 +727,7 @@ qi_counts
 Data IO flow
 ------------
 
-.. literalinclude:: ../config_files_sd/report_io.json
+.. literalinclude:: ../config_files_sd/report_io_sd.json
 
 
 .. _ecv_noreports_config_sd_all:
