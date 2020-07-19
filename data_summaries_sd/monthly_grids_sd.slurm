@@ -2,10 +2,9 @@
 # Runs the pyscript that aggregates the monthly partitions in a time series
 # of monthly grids on every source-deck and table
 #
-# log dir does not need to exist
 #
 # Calling sequence:
-# ./monthly_grids_launcher.sh log_dir script_config_file process_list
+# ./monthly_grids_sd.slurm log_dir script_config_file process_list
 
 # ------------------------------------------------------------------------------
 queue=short-serial
