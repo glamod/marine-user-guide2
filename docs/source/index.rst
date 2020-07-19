@@ -315,7 +315,7 @@ Report quality time series plot
 Number of reports Hovmöller plots
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    * Data summary used: :ref:`monthly_grids_um_section` (counts files: header and observation tables)
+    * Data summary used: :ref:`monthly_grids_um_section` (report counts files: header and observation tables)
     * Configuration file: nreports_hovmoller_plot.json (:ref:`nreports_hovmoller_config`)
     * Command:
 
@@ -329,7 +329,7 @@ Number of reports Hovmöller plots
 ECV coverage time series plot grid
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    * Data summary used: :ref:`monthly_grids_um_section` (counts files: header and observation tables)
+    * Data summary used: :ref:`monthly_grids_um_section` (report counts files: header and observation tables)
     * Configuration file: ecv_coverage_ts_plot_grid.json (:ref:`ecv_coverage_config`)
     * Command:
 
