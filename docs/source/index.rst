@@ -72,10 +72,9 @@ Data directory setup
 
 The data the tools in this project use and the products created are stored
 in the marine-user-guide data directory [#fDDS]_. This directory does not contain
-the actual data files of the individual data releases, but links to the files in
-the directories of the data releases included in a version of the Marine User Guide. This approach
-greatly simplifies the configuration of the different scripts and is followed
-even if a given version is made up of a single data release.
+the actual data files, but links to the files in the data releases' directories. This
+approach greatly simplifies the configuration of the different scripts and is followed
+even if a given Marine User Guide version is made up of a single data release.
 
 The marine-user-guide data directory is then split in directories to host
 subsequent versions of the Marine User Guide.
@@ -236,23 +235,28 @@ where:
 Selected quality indicators time series
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Monthly summaries of categorical counts of quality indicators in the header table
+Monthly time series of categorical counts of quality indicators in the header table
 aggregated over all the source-deck IDs. These are additionally, split in counts by main
 platform types (ships and buoys) and include the total number of reports. They
 are stored in ascii pipe separated files.
 
-The configuration file, qi_counts_ts.json (:ref:`qi_counts_um`), includes \
+The configuration file, :ref:`qi_counts_um`, includes \
 very limited parameterization, with the platform type segregation pending to be \
 parameterized.
 
-A launcher bash script configures the LSF job for each quality indicator \
-(currently only report_quality and duplicate_status) and logs to \
-/logqi_counts_ts/*quality_indicator*.log in the data directory.
+A launcher bash script configures the SLURM job for each quality indicator
+summarized (currently only report_quality and duplicate_status) and logs to
+level2/log/*sid-dck*/*config_file*-*qi*.*ext*, with *ext* being *ok* or
+*failed* depending on job termination status.
 
 .. code-block:: bash
 
-   ./marine-user-guide/data_summaries/qi_counts_ts_launcher.sh version qi_counts_ts.json
+  ./marine-user-guide/data_summaries/monthly_qi.slurm version config_file
 
+where:
+
+* version: tag to use for Marine User Guide version
+* config_file: path to the monthly grids configuration file
 
 Figures
 -------
@@ -587,7 +591,7 @@ Monthly grids
 Quality indicators time series
 ------------------------------
 
-.. literalinclude:: ../config_files/qi_counts_ts.json
+.. literalinclude:: ../config_files/monthly_qi.json
 
 .. _nreports_ts_config:
 
