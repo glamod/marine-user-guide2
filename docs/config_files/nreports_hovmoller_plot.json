@@ -1,7 +1,7 @@
 {
-  "dir_data":"/group_workspaces/jasmin2/glamod_marine/data/marine-user-guide/v4/quicklooks",
-  "dir_out":"/group_workspaces/jasmin2/glamod_marine/data/marine-user-guide/v4/quicklooks",
-  "file_in_id" : "-no_reports_grid_ts-optimal",
+  "dir_data":"/group_workspaces/jasmin2/glamod_marine/data/marine-user-guide/v4/level2/reports",
+  "dir_out":"/group_workspaces/jasmin2/glamod_marine/data/marine-user-guide/v4/level2/reports",
+  "file_in_id" : "-reports_grid_ts-optimal",
   "file_out_id_sea":"nreports_hovmoller_seasonal.png",
   "file_out_id_mon":"nreports_hovmoller_monthly.png",
   "start":1851,

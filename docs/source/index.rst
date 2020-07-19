@@ -200,6 +200,8 @@ in the data. These aggregations are on the data counts and observation values
 and on some relevant quality indicators and are the basis to then create the
 time series plots and maps included in the MUG.
 
+.. _monthly_grids_um_section:
+
 Monthly grids
 ^^^^^^^^^^^^^
 
@@ -213,10 +215,10 @@ aggregations are applied:
 Each aggregation is stored in an individual netcdf file.
 
 All the aggregations are configured in a common configuration file,
-:ref:`mon_grids_um`. The current configuration for the MUG excludes reports
-not passing all the quality checks. The same tool can be used to produce
-data summaries with different filter criteria, but modifying the filter values
-in the configuration file.
+monthly_grids.json ( :ref:`mon_grids_um`). The current configuration for the MUG
+excludes reports not passing all the quality checks. The same tool can be used
+to produce data summaries with different filter criteria, but modifying the
+filter values in the configuration file.
 
 A launcher bash script configures the SLURM job for each CDM table and logs
 to level2/log/*sid-dck*/*config_file*-*table*.*ext*, with *ext* being *ok* or
@@ -224,7 +226,7 @@ to level2/log/*sid-dck*/*config_file*-*table*.*ext*, with *ext* being *ok* or
 
 .. code-block:: bash
 
-   ./marine-user-guide/data_summaries/monthly_grids.slurm version config_file
+   ./marine-user-guide/data_summaries/monthly_grids.slurm version monthly_grids.json
 
 where:
 
@@ -232,17 +234,20 @@ where:
 * config_file: path to the monthly grids configuration file
 
 
+
+.. _qi_counts_um_section:
+
 Selected quality indicators time series
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Monthly time series of categorical counts of quality indicators in the header table
-aggregated over all the source-deck IDs. These are additionally, split in counts by main
+Monthly time series of quality indicators' value counts aggregated over all the
+source-deck partitions. These are additionally, split in counts by main
 platform types (ships and buoys) and include the total number of reports. They
 are stored in ascii pipe separated files.
 
-The configuration file, :ref:`qi_counts_um`, includes \
-very limited parameterization, with the platform type segregation pending to be \
-parameterized.
+The configuration file monthly_qi.json ( :ref:`qi_counts_um`), includes very
+limited parameterization, basically the data paths. The python script only works
+on the CDM header table quality indicators.
 
 A launcher bash script configures the SLURM job for each quality indicator
 summarized (currently only report_quality and duplicate_status) and logs to
@@ -261,76 +266,78 @@ where:
 Figures
 -------
 
-The data summaries generated are used to generatd a series of maps and time series
-plots. The following sections give the necessary directives to create them, with
-references to the configuration files used.
+The data summaries generated are used to create the maps and time series plots
+included in the Marine User Guide. The following sections give the necessary
+directives to create them, with references to the configuration files used.
 
 Number of reports time series plot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Data summary used: report_quality quality indicators time series.
-* Configuration file: nreports_ts.json (:ref:`nreports_ts_config`)
+* Data summary used: :ref:`qi_counts_um_section` (report_quality counts file: \
+  total number of reports field only)
+* Configuration file: nreports_ts_plot.json ( :ref:`nreports_ts_config`)
 * Command:
 
   .. code-block:: bash
 
     source /marine-user-guide/setpaths.sh
     source /marine-user-guide/setenv.sh
-    python /marine-user-guide/figures/nreports_ts.py nreports_ts.json
+    python /marine-user-guide/figures/nreports_ts_plot.py nreports_ts_plot.json
 
 Duplicate status time series plot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    * Data summary used: duplicate_status quality indicators time series.
-    * Configuration file: nreports_dup_ts.json (:ref:`nreports_dup_ts_config`)
+    * Data summary used: :ref:`qi_counts_um_section` (duplicate_status file)
+    * Configuration file: duplicate_status_ts_plot.json (:ref:`nreports_dup_ts_config`)
     * Command:
 
       .. code-block:: bash
 
         source /marine-user-guide/setpaths.sh
         source /marine-user-guide/setenv.sh
-        python /marine-user-guide/figures/nreports_dup_ts.py nreports_dup_ts.json
+        python /marine-user-guide/figures/duplicate_status_ts_plot.py duplicate_status_ts_plot.json
 
 
 Report quality time series plot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    * Data summary used: report_quality quality indicators time series.
-    * Configuration file: nreports_qc_ts.json (:ref:`nreports_qc_ts_config`)
+    * Data summary used: :ref:`qi_counts_um_section` (report_quality file)
+    * Configuration file: report_quality_ts_plot.json (:ref:`nreports_qc_ts_config`)
     * Command:
 
       .. code-block:: bash
 
         source /marine-user-guide/setpaths.sh
         source /marine-user-guide/setenv.sh
-        python /marine-user-guide/figures/nreports_qc_ts.py nreports_qc_ts.json
+        python /marine-user-guide/figures/report_quality_ts_plot.py report_quality_ts_plot.json
 
-Seasonal and monthly Hovmöller plots
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    * Data summary used: monthly grids (counts, header and observation tables)
-    * Configuration file: nreports_hovmoller.json (:ref:`nreports_hovmoller_config`)
+Number of reports Hovmöller plots
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    * Data summary used: :ref:`monthly_grids_um_section` (counts files: header and observation tables)
+    * Configuration file: nreports_hovmoller_plot.json (:ref:`nreports_hovmoller_config`)
     * Command:
 
       .. code-block:: bash
 
         source /marine-user-guide/setpaths.sh
         source /marine-user-guide/setenv.sh
-        python /marine-user-guide/figures/nreports_hovmoller.py nreports_hovmoller.json
+        python /marine-user-guide/figures/nreports_hovmoller_plot.py nreports_hovmoller_plot.json
 
 
-ECV nreports and coverage time series
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ECV coverage time series plot grid
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    * Data summary used: monthly grids (counts, header and observation tables)
-    * Configuration file: ecv_coverage_ts_grid.json (:ref:`ecv_coverage_config`)
+    * Data summary used: :ref:`monthly_grids_um_section` (counts files: header and observation tables)
+    * Configuration file: ecv_coverage_ts_plot_grid.json (:ref:`ecv_coverage_config`)
     * Command:
 
       .. code-block:: bash
 
         source /marine-user-guide/setpaths.sh
         source /marine-user-guide/setenv.sh
-        python /marine-user-guide/figures/ecv_coverage_ts_grid.py ecv_coverage_ts_grid.json
+        python /marine-user-guide/figures/ecv_coverage_ts_plot_grid.py ecv_coverage_ts_plot_grid.json
 
 Maps with number of observations and number of months observed
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -593,41 +600,44 @@ Quality indicators time series
 
 .. literalinclude:: ../config_files/monthly_qi.json
 
+
 .. _nreports_ts_config:
 
-nreports_ts configuration
--------------------------
+Number of reports time series plot
+----------------------------------
 
-.. literalinclude:: ../config_files/nreports_ts.json
+.. literalinclude:: ../config_files/nreports_ts_plot.json
+
 
 .. _nreports_dup_ts_config:
 
-nreports_dup_ts configuration
------------------------------
+Duplicate status time series plot
+---------------------------------
 
-.. literalinclude:: ../config_files/nreports_dup_ts.json
+.. literalinclude:: ../config_files/duplicate_status_ts_plot.json
 
 .. _nreports_qc_ts_config:
 
-nreports_qc_ts configuration
-----------------------------
+Report quality time series plot
+-------------------------------
 
-.. literalinclude:: ../config_files/nreports_qc_ts.json
+.. literalinclude:: ../config_files/report_quality_ts_plot.json
+
 
 .. _nreports_hovmoller_config:
 
-nreports_hovmoller configuration
---------------------------------
+Number of reports Hovmöller plots
+---------------------------------
 
-.. literalinclude:: ../config_files/nreports_hovmoller.json
+.. literalinclude:: ../config_files/nreports_hovmoller_plot.json
 
 
 .. _ecv_coverage_config:
 
-ecv_coverage configuration
---------------------------
+ECV coverage time series plot grid
+----------------------------------
 
-.. literalinclude:: ../config_files/ecv_coverage_ts_grid.json
+.. literalinclude:: ../config_files/ecv_coverage_ts_plot_grid.json
 
 
 .. _map_mean_config:
