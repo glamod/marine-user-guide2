@@ -28,6 +28,11 @@ This project contains the necessary code to produce the data summaries that are
 included in the Marine User Guide. These help document the status of the marine
 in situ data in the CDS after every new data release.
 
+Additionally, the tools employed to create the individual source deck reports
+are also available in this project. These can be created for a single data
+release or for the combination of releases included in a Marine User Guide
+version.
+
 The marine data available in the CDS is the result of a series of data releases
 that are stored in the marine data file system in different directories. This
 project uses the data in the marine file system, rather than accessing the CDS
@@ -37,10 +42,11 @@ Every new data release can potentially be created with a different version of
 the marine processing software. The current version of this project is
 compatible with the glamod-marine-processing code up to version v1.1.
 
-Additionally, the tools employed to create the individual source deck reports
-are also available in this project. These can be created for a single data
-release or for the combination of releases included in a Marine User Guide
-version.
+The configuration files needed to run this project are maintained in a separate
+git repository (https://git.noc.ac.uk/iregon/glamod-marine-config.git). Every
+Marine User Guide version has a dedicated directory within this repository. The
+appendices in this document provide the files (or an extract of them) used to run
+the fourth version of the Marine User Guide.
 
 Tool set-up
 ===========
@@ -564,6 +570,12 @@ where:
 
 Appendix 1. Marine User Guide configuration files
 =================================================
+
+The configuration files needed to run this project are maintained in a separate
+git repository (https://git.noc.ac.uk/iregon/glamod-marine-config.git). Every
+Marine User Guide version has a dedicated directory within this repository. This
+appendix provides the files (or an extract of them) used to run the fourth
+version of the Marine User Guide.
 
 .. _level2:
 
