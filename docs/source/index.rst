@@ -498,22 +498,26 @@ where:
 Figures
 -------
 
-ECV number of reports time series
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ECV reports time series plots
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    * Data summary used: monthly grids (counts, header and observation tables)
+    * Data summary used: :ref:`monthly_grids_sd_section` (counts, header and observation tables)
     * Launcher script: configures a SLURM job for each *sid-dck* data partition \
       and logs to *log_dir*/*sid-dck/*config_file*.*ext*, with *ext* being *ok* \
       or *failed* depending on job termination status.
 
       .. code-block:: bash
 
-        ./marine-user-guide/figures_sd/ecv_noreports_ts_grid_sd.slurm log_dir config_file source_deck_list
+        ./marine-user-guide/figures_sd/ecv_reports_ts_plot_grid_sd.slurm log_dir config_file source_deck_list
 
       where:
 
-      * log_dir: is created by the launcher script if does not exist
-      * config_file: :ref:`ecv_noreports_config_sd_all`, :ref:`ecv_noreports_config_sd_optimal`
+      * log_dir: the logging directory is assumed to be split in the source-deck data
+        partitions. It is normally */level2/log* in the directory where the data is.
+        It needs to be input to the launcher as this script can be run either on the
+        individual release directories or on the marine-user-guide data directories.
+      * config_file: ecv_reports_ts_plot_grid_sd-all.json ( :ref:`ecv_noreports_config_sd_all`), \
+        ecv_reports_ts_plot_grid_sd-optimal.json  ( :ref:`ecv_noreports_config_sd_optimal` )
       * source_deck_list: ascii file with a list of the *sid-dck* partitions to process
 
 
@@ -724,27 +728,28 @@ qi_counts
 
 .. _report_io_sd:
 
-Data IO flow
-------------
+Monthly time series with source to C3S IO flow
+----------------------------------------------
 
 .. literalinclude:: ../config_files_sd/report_io_sd.json
 
 
+
 .. _ecv_noreports_config_sd_all:
 
-ecv_noreports_ts_grid plot (all data)
--------------------------------------
+ECV reports time series plots (all data)
+----------------------------------------
 
-.. literalinclude:: ../config_files_sd/ecv_noreports_ts_grid_sd-all.json
+.. literalinclude:: ../config_files_sd/ecv_reports_ts_plot_grid_sd-all.json
 
 
 
 .. _ecv_noreports_config_sd_optimal:
 
-ecv_noreports_ts_grid plot (optimal dataset)
---------------------------------------------
+ECV reports time series plots (optimal dataset)
+-----------------------------------------------
 
-.. literalinclude:: ../config_files_sd/ecv_noreports_ts_grid_sd-optimal.json
+.. literalinclude:: ../config_files_sd/ecv_reports_ts_plot_grid_sd-optimal.json
 
 
 
