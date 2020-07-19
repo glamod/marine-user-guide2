@@ -243,8 +243,8 @@ where:
 
 .. _qi_counts_um_section:
 
-Selected quality indicators time series
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Monthly time series of selected quality indicators
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Monthly time series of quality indicators' value counts aggregated over all the
 source-deck partitions. These are additionally, split in counts by main
@@ -377,7 +377,7 @@ Mean observed value maps
 Individual source-deck reports
 ==============================
 
-The data, output and log directories are assumed to be partitioned in source-deck 
+The data, output and log directories are assumed to be partitioned in source-deck
 partitions.
 
 The source_deck_list is a simple ascii file with the list of source ID - deck ID
@@ -394,6 +394,8 @@ Data data summaries
 
 The data summaries are monthly aggregations of report counts, observation values
 and additional CDM fields of the individual source-deck's table files.
+
+.. _monthly_grids_sd_section:
 
 Monthly grids
 ^^^^^^^^^^^^^
@@ -434,31 +436,35 @@ where:
   * source_deck_list: ascii file with a list of the *sid-dck* partitions to process
 
 
+.. _qi_counts_sd_section:
+
 Monthly time series of selected quality indicators
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Monthly summaries of categorical counts of quality indicators in the header table
-for every *sid-dck* data partition. These are additionally, split in counts by
-main platform types (ships and buoys) and include the total number of reports.
-They are stored in ascii pipe separated files.
+Monthly time series of quality indicators' value counts for every *sid-dck* data
+partition. These are additionally, split in counts by main platform types (ships
+and buoys) and include the total number of reports. They are stored in ascii
+pipe separated files.
 
-The configuration file, :ref:`qi_counts_config_sd`, includes very limited
-parameterization, with the platform type segregation pending to be \
-parameterized.
+The configuration file monthly_qi_sd.json ( :ref:`qi_counts_sd`), includes very
+limited parameterization, basically the data paths. The python script only works
+on the CDM header table quality indicators.
 
 A launcher bash script configures a SLURM job for each *sid-dck* data partition
 and each quality indicator (currently only report_quality and duplicate_status)
-and logs to *log_dir*/*sid-dck/*config_file*-*qi*.*ext*, with *ext* being *ok*
+and logs to *log_dir*/*sid-dck*/*config_file*-*qi*.*ext*, with *ext* being *ok*
 or *failed* depending on job termination status.
 
 .. code-block:: bash
 
-   ./marine-user-guide/data_summaries_sd/qi_counts_ts.slurm log_dir config_file source_deck_list
+   ./marine-user-guide/data_summaries_sd/monthly_qi_sd.slurm log_dir monthly_qi_sd.json source_deck_list
 
 where:
 
-  * log_dir: is created by the launcher script if does not exist
-  * config_file: :ref:`qi_counts_config_sd`
+  * log_dir: the logging directory is assumed to be split in the source-deck data
+    partitions. It is normally */level2/log* in the directory where the data is.
+    It needs to be input to the launcher as this script can be run either on the
+    individual release directories or on the marine-user-guide data directories.
   * source_deck_list: ascii file with a list of the *sid-dck* partitions to process
 
 
@@ -701,12 +707,12 @@ Monthly grids (optimal dataset)
 .. literalinclude:: ../config_files_sd/monthly_grids_sd_optimal.json
 
 
-.. _qi_counts_config_sd:
+.. _qi_counts_sd:
 
 qi_counts
 ---------
 
-.. literalinclude:: ../config_files_sd/qi_counts_ts.json
+.. literalinclude:: ../config_files_sd/monthly_qi_sd.json
 
 
 .. _report_io_sd:
