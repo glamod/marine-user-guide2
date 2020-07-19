@@ -10,7 +10,7 @@
 # ------------------------------------------------------------------------------
 queue=short-serial
 t=02:00:00
-mem=5000
+mem=10000
 om=truncate
 # ------------------------------------------------------------------------------
 source ../setpaths.sh
@@ -36,7 +36,9 @@ do
   do
     J=$table"_"$sid_dck
     log_file=$log_dir_sd/$(basename $script_config_file .json)-$table".ok"
+    if [ -f "$log_file" ];then rm $log_file;fi
     failed_file=$log_dir_sd/$(basename $script_config_file .json)-$table".failed"
+    if [ -f "$failed_file" ];then rm $failed_file;fi
     jid=$(sbatch -J $J -o $log_file -e $log_file -p $queue -t $t --mem $mem --open-mode $om --wrap="python $pyscript $sid_dck $table $script_config_file")
     sbatch --dependency=afternotok:${jid##* } --kill-on-invalid-dep=yes -p $queue -t 00:05:00 --mem 1 --open-mode $om --wrap="mv $log_file $failed_file"
   done
