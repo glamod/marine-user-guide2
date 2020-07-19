@@ -52,9 +52,14 @@ def main():
     
     with open(periods_file,'r') as fO:
         periods = json.load(fO) 
-        
-    yr_ini = periods[sid_dck]['year_init']
-    yr_end = periods[sid_dck]['year_end']
+   
+    # Compatibility user manual periods-config file with single release periods file 
+    if periods.get('sid_dck'):    
+        yr_ini = min(periods['sid_dck'][sid_dck]['year_init'].values())
+        yr_end = max(periods['sid_dck'][sid_dck]['year_end'].values())
+    else:
+        yr_ini = int(periods[sid_dck]['year_init'])
+        yr_end = int(periods[sid_dck]['year_end'])
     
     # Initialize the structure where the TSs is stored
     index = pd.date_range(start=datetime.datetime(int(yr_ini),1,1),end=datetime.datetime(int(yr_end),12,1),freq='MS')
