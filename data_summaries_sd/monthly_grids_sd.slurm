@@ -30,7 +30,11 @@ fi
 for sid_dck in $(awk '{print $1}' $process_list)
 do
   log_dir_sd=$log_dir/$sid_dck
-  if [ ! -d $log_dir_sd ];then mkdir -p $log_dir_sd; fi
+  if [ ! -d $log_dir_sd ]
+  then
+    echo "$sid_dck LOG dir does not exist: $log_dir_sd"
+    exit
+  fi
   for table in header observations-sst observations-at observations-dpt observations-wd observations-ws observations-slp
   do
     J=$table"_"$sid_dck
