@@ -339,31 +339,33 @@ ECV coverage time series plot grid
         source /marine-user-guide/setenv.sh
         python /marine-user-guide/figures/ecv_coverage_ts_plot_grid.py ecv_coverage_ts_plot_grid.json
 
-Maps with number of observations and number of months observed
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  * Data summary used: monthly grids (counts, header and observation tables)
-  * Configuration file: map_nobs_from_monthly_nc.json (:ref:`map_nobs_config`)
+Number of reports and number of months maps
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  * Data summary used: :ref:`monthly_grids_um_section` (report counts files: header and observation tables)
+  * Configuration file: nreports_and_nmonths_maps.json (:ref:`nreports_nmonths_map`)
   * Command:
 
     .. code-block:: bash
 
       source /marine-user-guide/setpaths.sh
       source /marine-user-guide/setenv.sh
-      python /marine-user-guide/figures/map_nobs_from_monthly_nc.py map_nobs_from_monthly_nc.json
+      python /marine-user-guide/figures/nreports_and_nmonths_maps.py nreports_and_nmonths_maps.json
 
-Maps with ECVs mean observations value
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  * Data summary used: monthly grids (mean, observation tables only)
-  * Configuration file: map_mean_from_monthly_nc.json (:ref:`map_mean_config`)
+Mean observed value maps
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+  * Data summary used: :ref:`monthly_grids_um_section` (mean files: observation tables)
+  * Configuration file: mean_observed_value_maps.json (:ref:`map_mean_config`)
   * Command:
 
     .. code-block:: bash
 
       source /marine-user-guide/setpaths.sh
       source /marine-user-guide/setenv.sh
-      python /marine-user-guide/figures/map_mean_from_monthly_nc.py map_mean_from_monthly_nc.json
+      python /marine-user-guide/figures/mean_observed_value_maps.py mean_observed_value_maps.json
 
 
 Individual source-deck reports
@@ -640,19 +642,21 @@ ECV coverage time series plot grid
 .. literalinclude:: ../config_files/ecv_coverage_ts_plot_grid.json
 
 
+.. _nreports_nmonths_map:
+
+Number of reports and number of months maps
+-------------------------------------------
+
+.. literalinclude:: ../config_files/nreports_and_nmonths_maps.json
+
+
 .. _map_mean_config:
 
-map_mean configuration
---------------------------
+Mean observed value maps
+------------------------
 
-.. literalinclude:: ../config_files/map_mean_from_monthly_nc.json
+.. literalinclude:: ../config_files/mean_observed_value_maps.json
 
-.. _map_nobs_config:
-
-map_nobs configuration
-----------------------
-
-.. literalinclude:: ../config_files/map_nobs_from_monthly_nc.json
 
 
 .. _appendix_sd:
