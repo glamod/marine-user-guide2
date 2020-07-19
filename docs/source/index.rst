@@ -175,7 +175,7 @@ the files, this is done by linking the corresponding files from the releases' \
 directories to the marine-user-guide data directory. Data linked is the level2 \
 data files and level1a and level1c quicklook json files.
 
-A launcher bash script configures the SLURM job for each *sid-dck* data partition
+A launcher bash script configures a SLURM job for each *sid-dck* data partition
 and logs to level2/log/*sid-dck*/merge_release_data.*ext*, with *ext* being *ok* or
 *failed* depending on job termination status.
 
@@ -211,7 +211,7 @@ time series plots and maps included in the MUG.
 Monthly grids
 ^^^^^^^^^^^^^
 
-Aggregations in a monthly lat-lon grids. The CDM table determines what
+Aggregations in monthly lat-lon grids. The CDM table determines what
 aggregations are applied:
 
   * header table: number of reports per grid cell per month.
@@ -226,7 +226,7 @@ excludes reports not passing all the quality checks. The same tool can be used
 to produce data summaries with different filter criteria, but modifying the
 filter values in the configuration file.
 
-A launcher bash script configures the SLURM job for each CDM table and logs
+A launcher bash script configures a SLURM job for each CDM table and logs
 to level2/log/*sid-dck*/*config_file*-*table*.*ext*, with *ext* being *ok* or
 *failed* depending on job termination status.
 
@@ -255,7 +255,7 @@ The configuration file monthly_qi.json ( :ref:`qi_counts_um`), includes very
 limited parameterization, basically the data paths. The python script only works
 on the CDM header table quality indicators.
 
-A launcher bash script configures the SLURM job for each quality indicator
+A launcher bash script configures a SLURM job for each quality indicator
 summarized (currently only report_quality and duplicate_status) and logs to
 level2/log/*sid-dck*/*config_file*-*qi*.*ext*, with *ext* being *ok* or
 *failed* depending on job termination status.
@@ -377,6 +377,9 @@ Mean observed value maps
 Individual source-deck reports
 ==============================
 
+The data, output and log directories are assumed to be partitioned in source-deck 
+partitions.
+
 The source_deck_list is a simple ascii file with the list of source ID - deck ID
 pairs to process by the launcher script.
 
@@ -395,19 +398,21 @@ and additional CDM fields of the individual source-deck's table files.
 Monthly grids
 ^^^^^^^^^^^^^
 
-Monthly aggregations in a latitude-longitude grid, stored in nc files. The
-aggregations depend on the CDM table:
+Aggregations in monthly lat-lon grids. The CDM table determines what
+aggregations are applied:
 
-  * header table: number of reports.
-  * observations tables: number of observations and observed_value mean, max \
-    and min.
+  * header table: number of reports per grid cell per month.
+  * observations tables: number of observations and mean, max and min
+    observed_value per grid cell per month.
 
-The aggregations for all the tables are configured in a common configuration
-file. There are currently two configurations that need to be run to create
-the data summaries needed: full dataset and optimal (all quality control
-checks passed) dataset.
+Each aggregation is stored in an individual netcdf file.
 
-A launcher bash script configures the SLURM job for each *sid-dck* data partition
+All the aggregations are configured in a common configuration file. There are
+currently two configurations that need to be run to create the data summaries
+needed: one using the full dataset and another one using the optimal dataset
+(all quality control checks passed).
+
+A launcher bash script configures a SLURM job for each *sid-dck* data partition
 and each table and logs to *log_dir*/*sid-dck*/*config_file*-*table*.*ext*, with
 *ext* being *ok* or *failed* depending on job termination status.
 
@@ -417,11 +422,14 @@ and each table and logs to *log_dir*/*sid-dck*/*config_file*-*table*.*ext*, with
 
 where:
 
-  * log_dir: is created by the launcher script if does not exist
+  * log_dir: the logging directory is assumed to be split in the source-deck data
+    partitions. It is normally */level2/log* in the directory where the data is.
+    It needs to be input to the launcher as this script can be run either on the
+    individual release directories or on the marine-user-guide data directories.
   * config_file:
 
-    * Full dataset: monthly_grids_all.json (:ref:`monthly_grids_sd_all`)
-    * Optimal dataset: monthly_grids_optimal.json (:ref:`monthly_grids_sd_optimal`)
+    * Full dataset: monthly_grids_sd_all.json (:ref:`monthly_grids_sd_all`)
+    * Optimal dataset: monthly_grids_sd_optimal.json (:ref:`monthly_grids_sd_optimal`)
 
   * source_deck_list: ascii file with a list of the *sid-dck* partitions to process
 
@@ -438,7 +446,7 @@ The configuration file, :ref:`qi_counts_config_sd`, includes very limited
 parameterization, with the platform type segregation pending to be \
 parameterized.
 
-A launcher bash script configures the SLURM job for each *sid-dck* data partition
+A launcher bash script configures a SLURM job for each *sid-dck* data partition
 and each quality indicator (currently only report_quality and duplicate_status)
 and logs to *log_dir*/*sid-dck/*config_file*-*qi*.*ext*, with *ext* being *ok*
 or *failed* depending on job termination status.
@@ -460,7 +468,7 @@ Monthly time series with source to C3S IO flow
 Collection of monthly time series with the initial reports in source, selected,
 invalid and delivered to C3S for every *sid-dck* data partition.
 
-A launcher bash script configures the SLURM job for each *sid-dck* data partition
+A launcher bash script configures a SLURM job for each *sid-dck* data partition
 and logs to *log_dir*/*sid-dck/*config_file*.*ext*, with *ext* being *ok* or
 *failed* depending on job termination status.
 
@@ -481,7 +489,7 @@ ECV number of reports time series
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     * Data summary used: monthly grids (counts, header and observation tables)
-    * Launcher script: configures the SLURM job for each *sid-dck* data partition \
+    * Launcher script: configures a SLURM job for each *sid-dck* data partition \
       and logs to *log_dir*/*sid-dck/*config_file*.*ext*, with *ext* being *ok* \
       or *failed* depending on job termination status.
 
@@ -501,7 +509,7 @@ Observed parameters latitudinal time series
 
     * Data summary used: monthly grids (counts, min, max, counts from observation tables). \
       All data and optimal dataset summaries.
-    * Launcher script: configures the SLURM job for each *sid-dck* data partition \
+    * Launcher script: configures a SLURM job for each *sid-dck* data partition \
       and each *mode* (all data and optimal dataset) logs to *log_dir*/*sid-dck/*config_file*-*mode*.*ext*, with *ext* being *ok* \
       or *failed* depending on job termination status.
 
@@ -676,20 +684,21 @@ Mean observed value maps
 Appendix 2. Individual source-deck reports configuration files
 ==============================================================
 
-.. _monthly_grids_sd_optimal:
-
-monthly grids optimal dataset
------------------------------
-
-.. literalinclude:: ../config_files_sd/monthly_grids_optimal.json
-
-
 .. _monthly_grids_sd_all:
 
-monthly grids full dataset
---------------------------
+Monthly grids (full dataset)
+----------------------------
 
-.. literalinclude:: ../config_files_sd/monthly_grids_all.json
+.. literalinclude:: ../config_files_sd/monthly_grids_sd_all.json
+
+
+.. _monthly_grids_sd_optimal:
+
+
+Monthly grids (optimal dataset)
+-------------------------------
+
+.. literalinclude:: ../config_files_sd/monthly_grids_sd_optimal.json
 
 
 .. _qi_counts_config_sd:
