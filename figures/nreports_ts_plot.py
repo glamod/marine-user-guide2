@@ -44,7 +44,8 @@ if __name__ == "__main__":
     data = pd.read_csv(file_data,delimiter='|',header = 0,index_col=[0],parse_dates=[0])
     
     y_med = data['0'].max()/2
-        
+    
+    # Use min_periods argument in rolling if a gap needs to bo covered...
     f, ax = plt.subplots(1, 1,figsize=figsize)
     ax.stackplot(data.index,data['0.ships'].rolling(12, center=True).mean()
         ,data['0.buoys'].rolling(12, center=True).mean(),
