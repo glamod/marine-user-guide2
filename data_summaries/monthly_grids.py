@@ -99,7 +99,7 @@ def main():
     stop = datetime.datetime(config['stop'],12,31)
     for dt in rrule.rrule(rrule.MONTHLY, dtstart=start, until=stop):
         date_file = dt.strftime('%Y-%m')
-        parq_path = os.path.join(config['dir_out'],'-'.join([date_file,table,'.data.parq.tmp']))
+        parq_path = os.path.join(config['dir_out'],'-'.join([date_file,table,'.data.parq.tmp',,str(random.randint(0, 1000000))]))
         files_list = glob.glob(os.path.join(config['dir_data'],'*','-'.join([table,date_file]) + '*.psv' ))
         if len(files_list) == 0:
             logging.warning('NO DATA FILES FOR TIME PARTITION {}'.format(date_file))

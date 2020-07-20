@@ -45,6 +45,7 @@ import dask.diagnostics as diag
 import datashader as ds
 import xarray as xr
 import datetime
+import random
 
 from data_summaries_sd import properties
 from common import query_cdm
@@ -126,7 +127,7 @@ def main():
         if dt < start or dt > stop:
             logging.info('File {} out of requested period'.format(file))
             continue
-        parq_path = os.path.join(dir_out,'-'.join([yyyy,mm,table,'.data.parq.tmp']))
+        parq_path = os.path.join(dir_out,'-'.join([yyyy,mm,table,'.data.parq.tmp',str(random.randint(0, 1000000))]))
 
         cdm_table = query_cdm.query_monthly_table(sid_dck, table, dt.year, dt.month, **kwargs)
         cdm_table.dropna(inplace = True)
