@@ -166,7 +166,7 @@ def main():
         max_agg = xr.concat(max_list,dim = 'time')
         min_agg = xr.concat(min_list,dim = 'time')
     
-    out_file = os.path.join(dir_out,'-'.join([table,'no_reports_grid_ts',config['id_out'] + '.nc']))
+    out_file = os.path.join(dir_out,'-'.join([table,'reports_grid_ts',config['id_out'] + '.nc']))
     to_nc(nreports_agg,'counts',out_file)
     
     if table != 'header':
