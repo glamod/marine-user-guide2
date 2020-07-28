@@ -26,27 +26,31 @@ Introduction
 
 This project contains the necessary code to produce the data summaries that are
 included in the Marine User Guide. These help document the status of the marine
-in situ data in the CDS after every new data release.
+in situ data in the CDS after every new data release. The marine data available
+in the CDS is the result of a series of data releases that are stored in the
+marine data file system in different directories. This project uses the data in
+the marine file system, rather than accessing the CDS data.
 
 Additionally, the tools employed to create the individual source deck reports
 are also available in this project. These can be created for a single data
 release or for the combination of releases included in a Marine User Guide
 version.
 
-The marine data available in the CDS is the result of a series of data releases
-that are stored in the marine data file system in different directories. This
-project uses the data in the marine file system, rather than accessing the CDS
-data.
+This manual has two main independent sections dedicated to the Marine User Guide
+and to the individual source deck reports:
+
+* :ref:`marine_user_guide`
+* :ref:`source_deck_reports`
 
 Every new data release can potentially be created with a different version of
 the marine processing software. The current version of this project is
-compatible with the glamod-marine-processing code up to version v1.1.
+compatible with the glamod-marine-processing code up to version v1.1 the HEAD
+of the repository as of August 2020.
 
 The configuration files needed to run this project are maintained in a separate
-git repository (https://git.noc.ac.uk/iregon/glamod-marine-config.git). Every
-Marine User Guide version has a dedicated directory within this repository. The
-appendices in this document provide the files (or an extract of them) used to run
-the fourth version of the Marine User Guide.
+git repository (https://git.noc.ac.uk/iregon/glamod-marine-config.git), within
+this repository.
+
 
 Tool set-up
 ===========
@@ -54,15 +58,18 @@ Tool set-up
 Code set up
 -----------
 
-Clone the remote repository:
+The repository was tagged to v1.1 after C3S data release_2.0 and Marine User
+Guide v4. However changes were added to the project following the job scheduler
+change in CEDA-JASMIN. These changes have not been tagged yet, to clone the
+latest available:
 
 .. code-block:: bash
 
   git clone git@git.noc.ac.uk:iregon/marine-user-guide.git
 
-Build the python environment using the requirements.txt file in marine-user-guide/env. This
-step system dependent. The following code block described the steps to
-follow in CEDA JASMIN, using the Jaspy toolkit.
+Build the python environment using the requirements.txt file in
+marine-user-guide/env. This step system dependent. The following code block
+described the steps to follow in CEDA JASMIN, using the Jaspy toolkit.
 
 .. code-block:: bash
 
@@ -101,8 +108,8 @@ This general directory needs to be created before starting using the tool.
 .. rubric:: Footnotes
 
 .. [#fDDS] When producing data summaries and figures of individual source-decks \
-  of a single release, the data would normally be accessed directly from the \
-  release data directory.
+  of a single release, the data is accessed directly from the release data
+  directory.
 
 
 Paths setup
@@ -116,6 +123,7 @@ Edit file marine-user-guide/setpaths.sh and modify as needed the following field
 * mug_data_directory: marine user guide data directory path.
 
 
+.. _marine_user_guide:
 
 Marine User Guide
 =================
@@ -123,6 +131,8 @@ Marine User Guide
 Every C3S Marine User Guide version includes a series of figures that describe
 the marine in situ data holdings in the CDS. The following sections explain how
 these figures are created for every new version of the Marine User Guide.
+
+.. _init_mug:
 
 Initializing a new user guide
 -----------------------------
@@ -374,11 +384,13 @@ Mean observed value maps
       python /marine-user-guide/figures/mean_observed_value_maps.py mean_observed_value_maps.json
 
 
+
+.. _source_deck_reports:
+
 Individual source-deck reports
 ==============================
 
-The data, output and log directories are assumed to be partitioned in source-deck
-partitions.
+First see :ref:`appendix_sd` for configuration file and options.
 
 The source_deck_list is a simple ascii file with the list of source ID - deck ID
 pairs to process by the launcher script.
@@ -386,7 +398,9 @@ pairs to process by the launcher script.
 Reports on a release merge
 --------------------------
 
-To create reports on a merge of data releases, bla,bla, with the quicklooks!
+To create the individual source-deck reports on a merge of data releases, steps
+in :ref:`init_mug` first need to be followed, so that the input data and
+required directory structure is ready in the marine-user-guide data directory.
 
 
 Data data summaries
@@ -700,6 +714,29 @@ Mean observed value maps
 
 Appendix 2. Individual source-deck reports configuration files
 ==============================================================
+
+The scripts for the individual source-deck reports can run both on a data release
+directory or on a release merge under the marine-user-guide data directory.
+
+For individual data releases the following will apply for file paths in
+the configuration files:
+
+* *dir_data*: <marine_data_directory>/*release*/*dataset*/level[1e|2]
+* *dir_out*:  <marine_data_directory>/*release*/*dataset*/level[1e|2]/reports
+
+with corresponding main paths for other input data required.
+
+For release merges the following will apply for file paths in
+the configuration files:
+
+* *dir_data*: <marine_data_directory>/marine-user-guide/*version*/level2
+* *dir_out*:  <marine_data_directory>/marine-user-guide/*version*/level2/reports
+
+with corresponding main paths for other input data required.
+
+The sample files provided can be found in the /marine-user-guide/release_demo
+directory of the configuration repository. They correspond to reports on the
+level1e data of an individual data release.
 
 .. _monthly_grids_sd_all:
 
