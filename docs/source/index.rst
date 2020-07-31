@@ -439,7 +439,7 @@ and each table and logs to *log_dir*/*sid-dck*/*config_file*-*table*.*ext*, with
 where:
 
   * log_dir: the logging directory is assumed to be split in the source-deck data
-    partitions. It is normally */level2/log* in the directory where the data is.
+    partitions. It is normally */level[1e|2]/log* in the directory where the data is.
     It needs to be input to the launcher as this script can be run either on the
     individual release directories or on the marine-user-guide data directories.
   * config_file:
@@ -476,7 +476,7 @@ or *failed* depending on job termination status.
 where:
 
   * log_dir: the logging directory is assumed to be split in the source-deck data
-    partitions. It is normally */level2/log* in the directory where the data is.
+    partitions. It is normally */level[1e|2]/log* in the directory where the data is.
     It needs to be input to the launcher as this script can be run either on the
     individual release directories or on the marine-user-guide data directories.
   * source_deck_list: ascii file with a list of the *sid-dck* partitions to process
@@ -502,7 +502,7 @@ and logs to *log_dir*/*sid-dck*/*config_file*.*ext*, with *ext* being *ok* or
 where:
 
 * log_dir: the logging directory is assumed to be split in the source-deck data
-  partitions. It is normally */level2/log* in the directory where the data is.
+  partitions. It is normally */level[1e|2]/log* in the directory where the data is.
   It needs to be input to the launcher as this script can be run either on the
   individual release directories or on the marine-user-guide data directories.
 * report_io_sd.json: :ref:`report_io_sd`
@@ -527,7 +527,7 @@ ECV reports time series plots
       where:
 
       * log_dir: the logging directory is assumed to be split in the source-deck data
-        partitions. It is normally */level2/log* in the directory where the data is.
+        partitions. It is normally */level[1e|2]/log* in the directory where the data is.
         It needs to be input to the launcher as this script can be run either on the
         individual release directories or on the marine-user-guide data directories.
       * config_file: ecv_reports_ts_plot_grid_sd-all.json ( :ref:`ecv_noreports_config_sd_all`), \
